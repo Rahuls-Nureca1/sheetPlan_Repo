@@ -1,0 +1,8 @@
+pip install flask
+pip install Flask-Migrate
+pip install Flask-SQLAlchemy
+pip install flask-marshmallow
+pip install flask-login
+pip install flask-admin
+pip install flask_wtf
+pip install marshmallow-sqlalchemy
