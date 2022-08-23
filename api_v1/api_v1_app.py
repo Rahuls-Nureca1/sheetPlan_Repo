@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify, Response
 
 
 from extensions import db
-from model.auth_model import Auth
+from models.auth_model import Auth
 
 
 api_v1_bp = Blueprint('api_v1', __name__)
