@@ -4,7 +4,7 @@ from extensions import db
 from typing import List
 
 class NIN_Ingredient( db.Model):
-    # __tablename__ = "nin_ingredient"
+    __tablename__ = "nin_ingredient"
     id = db.Column(db.Integer, primary_key=True)
     nin_code = db.Column(db.String(255), index=True, unique=True)
     ingredient_name = db.Column(db.String(255))

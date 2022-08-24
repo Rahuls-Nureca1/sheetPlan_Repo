@@ -6,6 +6,15 @@ from time import strftime
 from utils import api_logger
 
 
+from models.day_model import Day
+from models.timing_model import Timing
+from models.plan_model import Plan
+from models.ingredient_serving_unit_model import IngredientServingUnit
+from models.recipe_model import Recipe
+from models.ingredient_model import Ingredient
+
+
+
 
 nin_ingredient_bp = Blueprint('nin_ingredient', __name__)
 
@@ -100,14 +109,11 @@ def nin_ingredient_by_id(id):
 
 @nin_ingredient_bp.after_request
 def after_request_cal(response):
-    print('here')
     api_logger.after_request(request,response)
     return response
     
 
 @nin_ingredient_bp.errorhandler(Exception)
 def exceptions(e):
-    print('here1')
-
     api_logger.exceptions(request,e)
     return e.status_code

@@ -3,6 +3,7 @@ from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_cors import CORS
+from flask_seeder import FlaskSeeder
 
 
 cors = CORS()
@@ -11,3 +12,4 @@ ma = Marshmallow()
 migrate = Migrate(compare_type=True)
 ma = Marshmallow()
 login_manager = LoginManager()
+seeder = FlaskSeeder()
