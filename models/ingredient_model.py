@@ -7,7 +7,7 @@ class Ingredient( db.Model):
     __tablename__ = "ingredient"
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
-    nin_id = db.Column(db.Integer, db.ForeignKey('nin_ingredient.id'), nullable=False)
+    nin_id = db.Column(db.Integer, db.ForeignKey('nin_ingredient.id'), nullable=True)
     ingredient_name = db.Column(db.String)
     ingredient_desc = db.Column(db.String)
     quantity = db.Column(db.Float)

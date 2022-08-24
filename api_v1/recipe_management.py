@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
 from models.recipe_model import Recipe
+from models.ingredient_serving_unit_model import IngredientServingUnit
 from models.ingredient_model import Ingredient
 from schemas.recipe_schema import RecipeSchema
 from schemas.ingredient_schema import IngredientSchema
@@ -21,11 +22,25 @@ def create_recipe():
     try:
         req_body = request.get_json()
         recipe_data = Recipe(req_body['recipe_name'],req_body['image_path'],req_body['course'],req_body['cusine'],req_body['recipe_url'],req_body['website_name'],req_body['serving'], 1)
-        db.session.add(recipe_data)
-        db.session.flush()
+        ingredients = req_body['ingredients']
+        ingredient_data = []
+        try:
+            db.session.add(recipe_data)
+            db.session.flush()
+            for i in ingredients:
+                i['recipe_id'] = recipe_data.id
+                i['created_by'] = 1
+                ingredient_data.append(Ingredient(i['recipe_id'],None, i['ingredient_name'], i['ingredient_desc'], i['quantity'], i['quantity_in_gram'],None,i['serving_unit']))
+            db.session.add_all(ingredient_data)
+        except Exception as e:
+            print('exceptions', e)
+            db.session.rollback()    
+        
         db.session.commit()
+      
         return make_response({"success":"Recipe created successfully"}, 201)
     except Exception as e:
+        print('in catch', e)
         return jsonify(str(e))
 
 # # TODO:
