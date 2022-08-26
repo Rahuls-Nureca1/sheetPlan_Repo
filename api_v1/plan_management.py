@@ -12,6 +12,13 @@ from schemas.timing_schema import TimingSchema
 from models.plan_model import Plan
 from schemas.plan_schema import PlanSchema
 
+# from models.planed_meal_model import PlannedMeal
+# from schemas.planned_meal_schema import PlannedMealSchema
+
+
+from models.recipe_model import Recipe
+from schemas.recipe_schema import RecipeSchema
+
 from time import strftime
 from utils import api_logger
 
@@ -46,6 +53,48 @@ def create_plan_schedule():
         return make_response({"success":"Plan schedule created successfully"}, 201)
     except Exception as e:
         return jsonify(str(e))
+        
+
+# TODO:
+# Implement create a meal plan
+@plan_management_bp.route('/planMeal', methods=['POST'])
+def create_meal_plan():
+    try:
+      
+        req_body = request.get_json()
+
+        recipe_id = req_body['recipe_id']
+        schedule_id = req_body['schedule_id']
+
+        plan_schedule = Plan_Schedule.query.filter_by(id = schedule_id).first()
+        if plan_schedule == None:
+            return make_response({"success":False,"message":"Planed schedule Id not found"}, 404)
+
+        recipe = Recipe.query.filter_by(id = recipe_id).first()
+        if recipe == None:
+            return make_response({"success":False,"message":"recipe Id not found"}, 404)
+
+        print('planed schedule', plan_schedule)
+        print('recipe', recipe)
+        plan_schedule.recipes.append(recipe)
+        db.session.commit()
+        return make_response({"success":"Meal planned successfully"}, 201)
+    except Exception as e:
+        return jsonify(str(e))
+        
+# TODO:
+# Implement get meal plan from plan id and day id
+@plan_management_bp.route('/<planId>/<dayId>', methods=['GET'])
+def list_meal_plan_schedule(planId, dayId):
+    try:
+        print('plan_id', planId)
+        plan_schedule_data = PlannedMeal.query.filter_by(schedule_id = planId).all()
+        plan_data = plan_schema_list.dump(plan_schedule_data)
+        return make_response({"success":True,"data":plan_data}, 200)
+    except Exception as e:
+        print('exception', e)
+
+
 
 # TODO:
 # Implement list Plan schedule
@@ -53,7 +102,6 @@ def create_plan_schedule():
 def list_plan_schedule():
     try:
         plan_schedule_data = Plan_Schedule.query.all()
-        print('planSchedule',plan_schedule_data)
         plan_data = plan_schedule_schema_list.dump(plan_schedule_data)
         return make_response({"success":True,"data":plan_data}, 200)
     except Exception as e:
