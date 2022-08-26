@@ -22,6 +22,7 @@ def register_blueprints(app):
     app.register_blueprint(default_bp, url_prefix='/api')
     app.register_blueprint(nin_ingredient_bp, url_prefix='/api/v1/nin')
     app.register_blueprint(recipe_management_bp, url_prefix='/api/v1/recipe_management')
+    app.register_blueprint(plan_management_bp, url_prefix='/api/v1/plan_management')
 
 
 

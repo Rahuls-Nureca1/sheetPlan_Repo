@@ -10,7 +10,6 @@ logger.addHandler(handler)
 
 
 def after_request(request,response):
-    print('here in req')
     timestamp = strftime('[%Y-%b-%d %H:%M]')
     logger.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
     return response

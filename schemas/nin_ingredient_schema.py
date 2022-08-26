@@ -1,24 +1,13 @@
-from extensions import ma
-from models.nin_ingredient_model import NIN_Ingredient
-from marshmallow import Schema, fields, ValidationError, pre_load
 
-class MacrosSchema(Schema):
-    type = fields.String()
-    unit = fields.String()
-    value = fields.Float()
-
-class MicrosSchema(Schema):
-    type = fields.String()
-    unit = fields.String()
-    value = fields.Float()
+from marshmallow import Schema, fields
 
 class NININgredientSchema(Schema):
     id = fields.Int(dump_only=True)
     nin_code = fields.Str()
     ingredient_name = fields.Str()
     ingredient_description = fields.Str()
-    macros = fields.Nested(MacrosSchema)
-    micros = fields.Nested(MicrosSchema)
+    macros = fields.Raw()
+    micros = fields.Raw()
 
     # formatted_name = fields.Method("format_name", dump_only=True)
 

@@ -7,8 +7,8 @@ class NIN_Ingredient( db.Model):
     __tablename__ = "nin_ingredient"
     id = db.Column(db.Integer, primary_key=True)
     nin_code = db.Column(db.String(255), index=True, unique=True)
-    ingredient_name = db.Column(db.String(255))
-    ingredient_description = db.Column(db.String(500))
+    ingredient_name = db.Column(db.Text)
+    ingredient_description = db.Column(db.JSON)
     macros = db.Column(db.JSON)
     micros = db.Column(db.JSON)
     deleted = db.Column(db.Boolean, default=False)
