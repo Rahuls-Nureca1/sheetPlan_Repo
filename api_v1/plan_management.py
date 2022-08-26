@@ -1,7 +1,17 @@
+from cmath import log
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
 from models.plan_schedule_model import Plan_Schedule
 from schemas.plan_schedule_schema import PlanScheduleSchema
+
+from models.day_model import Day
+from schemas.day_schema import DaySchema
+from models.timing_model import Timing
+from schemas.timing_schema import TimingSchema
+
+from models.plan_model import Plan
+from schemas.plan_schema import PlanSchema
+
 from time import strftime
 from utils import api_logger
 
@@ -12,6 +22,15 @@ plan_management_bp = Blueprint('plan_management', __name__)
 
 plan_schedule_schema = PlanScheduleSchema()
 plan_schedule_schema_list = PlanScheduleSchema(many = True)
+
+day_schema = DaySchema()
+day_schema_list = DaySchema(many = True)
+
+timing_schema = TimingSchema()
+timing_schema_list = TimingSchema(many = True)
+
+plan_schema = PlanSchema()
+plan_schema_list = PlanSchema(many = True)
 
 
 # TODO:
@@ -78,6 +97,41 @@ def update_plan_schedule(id):
         print('exception', e)
 
 
+
+# TODO:
+# Implement auto schedule plan
+@plan_management_bp.route('/auto-schedule', methods=['GET'])
+def auto_plan_schedule():
+    try:
+       
+        plan = Plan.query.all()
+        day = Day.query.all()
+        timing = Timing.query.all()
+        
+        plan_list = plan_schema_list.dump(plan)
+        day_list = day_schema_list.dump(day)
+        timing_list = timing_schema_list.dump(timing)
+        print('plan_list', plan_list)
+        print('day_list', day_list)
+        print('timing_list', timing_list)
+        for plan in plan_list:
+            try:
+                for day in day_list:
+                    for timing in timing_list:
+                        plan_schedule = Plan_Schedule(plan['id'],day['id'],timing['id'],None)
+                        db.session.add(plan_schedule)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+
+
+        # db.session.commit()
+        return make_response({"success":True,"message":"Plan Scheduled successfully"}, 200)
+    except Exception as e:
+        print('exception', e)
+
+
+
 # TODO:
 # Implement get plan schedule by id
 @plan_management_bp.route('/<id>', methods=['GET'])
@@ -90,6 +144,7 @@ def plan_schedule_by_id(id):
             return make_response({"success":True,"data":plan_schedule_schema.dump(plan_schedule)}, 200)
     except Exception as e:
         print('exception', e)
+
 
 
 

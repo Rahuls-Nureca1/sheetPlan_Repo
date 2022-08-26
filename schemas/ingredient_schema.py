@@ -1,7 +1,5 @@
-from dataclasses import field
-from extensions import ma
-from models.nin_ingredient_model import NIN_Ingredient
-from marshmallow import Schema, fields, ValidationError, pre_load
+
+from marshmallow import Schema, fields
 
 class IngredientSchema(Schema):
 

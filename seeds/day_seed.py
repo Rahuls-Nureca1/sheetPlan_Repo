@@ -4,9 +4,7 @@ from models.day_model import Day
 
 # All seeders inherit from Seeder
 class DaySeeder(Seeder):
-  
   # run() will be called by Flask-Seeder
- 
   def run(self):
     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     # # data_gen = (y for y in days)
@@ -22,4 +20,4 @@ class DaySeeder(Seeder):
     for i in range(0,7):
       day = Day(i+1,days[i])
       db.session.add(day)
-      db.session.commit()
+    db.session.commit()

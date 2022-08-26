@@ -9,6 +9,7 @@ class Ingredient( db.Model):
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
     nin_id = db.Column(db.Integer, db.ForeignKey('nin_ingredient.id'), nullable=True)
     ingredient_name = db.Column(db.String)
+    ingredient_standard_name = db.Column(db.String)
     ingredient_desc = db.Column(db.String)
     quantity = db.Column(db.Float)
     quantity_in_gram = db.Column(db.Integer)
@@ -21,10 +22,11 @@ class Ingredient( db.Model):
     nin_ingredient = db.relationship('NIN_Ingredient', backref='plans')
     recipe = db.relationship('Recipe', backref='days')
 
-    def __init__(self, recipe_id, nin_id, ingredient_name, ingredient_desc, quantity, quantity_in_gram, serving_unit_id, serving_unit ) -> None:
+    def __init__(self, recipe_id, nin_id, ingredient_name,ingredient_standard_name, ingredient_desc, quantity, quantity_in_gram, serving_unit_id, serving_unit ) -> None:
         self.recipe_id = recipe_id
         self.nin_id = nin_id
         self.ingredient_name = ingredient_name
+        self.ingredient_standard_name = ingredient_standard_name
         self.ingredient_desc = ingredient_desc
         self.quantity = quantity
         self. quantity_in_gram = quantity_in_gram

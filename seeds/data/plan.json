@@ -1,0 +1,37 @@
+[
+    {"plan_name":  "Diabetes-North-Veg"},
+    {"plan_name":  "Diabetes-North-Non-Veg"},
+    {"plan_name":  "Diabetes-South-Non-Veg"},
+    {"plan_name":  "Diabetes-South-Veg"},
+
+    {"plan_name":  "Hypertension-North-Non-Veg"},
+    {"plan_name":  "Hypertension-North-Veg"},
+    {"plan_name":  "Hypertension-South-Non-Veg"},
+    {"plan_name":  "Hypertension-South-Veg"},
+
+    {"plan_name":  "PCOD - North-Veg"},
+    {"plan_name":  "PCOD - North-Non-Veg"},
+    {"plan_name":  "PCOD - South-Veg"},
+    {"plan_name":  "PCOD - South-Non-Veg"},
+
+    {"plan_name":  "Weight_loss-North-Non-Veg"},
+    {"plan_name":  "Weight_loss-North-Veg"},
+    {"plan_name":  "Weight_loss-South-Non-Veg"},
+    {"plan_name":  "Weight_loss-South-Veg"},
+
+
+    {"plan_name":  "Muscle_gain-North-Non-Veg"},
+    {"plan_name":  "Muscle_gain-North-Veg"},
+    {"plan_name":  "Muscle_gain-South-Non-Veg"},
+    {"plan_name":  "Muscle_gain-South-Veg"},
+
+    {"plan_name":  "Thyroid-North-Non-Veg"},
+    {"plan_name":  "Thyroid-North-Veg"},
+    {"plan_name":  "Thyroid-South-Non-Veg"},
+    {"plan_name":  "Thyroid-South-Veg"},
+
+    {"plan_name":  "Pre_Diabetes-North-Veg"},
+    {"plan_name":  "Pre_Diabetes-North-Non-Veg"},
+    {"plan_name":  "Pre_Diabetes-South-Non-Veg"},
+    {"plan_name":  "Pre_Diabetes-South-Veg"}
+    ]
