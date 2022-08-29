@@ -10,6 +10,6 @@ class PlannedMealSchema(Schema):
     planned_by = fields.Int()
     recipe = fields.Nested(RecipeSchema, many=False)
     plan_schedule = fields.Nested(PlanScheduleSchema, many=False)
-
+    
     # updated_by = fields.Date()
 

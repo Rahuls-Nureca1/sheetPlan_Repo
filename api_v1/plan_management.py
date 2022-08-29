@@ -12,6 +12,8 @@ from schemas.timing_schema import TimingSchema
 from models.plan_model import Plan
 from schemas.plan_schema import PlanSchema
 
+
+
 # from models.planed_meal_model import PlannedMeal
 # from schemas.planned_meal_schema import PlannedMealSchema
 
@@ -81,18 +83,74 @@ def create_meal_plan():
         return make_response({"success":"Meal planned successfully"}, 201)
     except Exception as e:
         return jsonify(str(e))
-        
+
+
+
+# TODO:
+# Implement create a meal plan
+@plan_management_bp.route('/delete-planned-meal', methods=['POST'])
+def delete_meal_plan():
+    try:
+      
+        req_body = request.get_json()
+
+        recipe_id = req_body['recipe_id']
+        schedule_id = req_body['schedule_id']
+
+        plan_schedule = Plan_Schedule.query.filter_by(id = schedule_id).first()
+        if plan_schedule == None:
+            return make_response({"success":False,"message":"Planed schedule Id not found"}, 404)
+
+        recipe = Recipe.query.filter_by(id = recipe_id).first()
+        if recipe == None:
+            return make_response({"success":False,"message":"recipe Id not found"}, 404)
+
+        print('planed schedule', plan_schedule)
+        print('recipe', recipe)
+        plan_schedule.recipes.remove(recipe)
+        db.session.commit()
+        return make_response({"success":"Meal plan deleted successfully"}, 201)
+    except Exception as e:
+        return jsonify(str(e))
+
+
+
 # TODO:
 # Implement get meal plan from plan id and day id
 @plan_management_bp.route('/<planId>/<dayId>', methods=['GET'])
 def list_meal_plan_schedule(planId, dayId):
     try:
-        print('plan_id', planId)
-        plan_schedule_data = PlannedMeal.query.filter_by(schedule_id = planId).all()
-        plan_data = plan_schema_list.dump(plan_schedule_data)
-        return make_response({"success":True,"data":plan_data}, 200)
+        
+        plan_schedule_data = Plan_Schedule.query.filter_by(plan_id = planId, day_id = dayId).all()
+        plan_data = plan_schedule_schema_list.dump(plan_schedule_data)
+
+        if len(plan_data) == 0:
+           return make_response({"success":False,"message":"Invalid plan id or day id"}, 200)
+
+        # print(plan_data)
+        data = {}
+        if len(plan_data):
+             data["success"] = True
+             data["Id"] = plan_data[0]['plan']['id']
+             data["plan_id"] = planId
+             data["plan_name"] = plan_data[0]['plan']['plan_name']
+             data["day"] = dayId
+             data["day_name"] = plan_data[0]["day"]['day']
+
+        for plan in plan_data:
+            # plan['recipes']['macros'] = {}
+            # plan['recipes']['micros'] = {}
+            data[plan['timing']['timing_label']] = plan['recipes']
+            print('plan', plan)
+
+        print("data",data)
+        
+
+
+        return make_response(plan_data, 200)
     except Exception as e:
         print('exception', e)
+
 
 
 
@@ -109,9 +167,9 @@ def list_plan_schedule():
 
 
 # TODO:
-# Implement delete NIN Ingredient
+# Implement delete plan schedule
 @plan_management_bp.route('/<id>', methods=['DELETE'])
-def delete_nin_ingredient(id):
+def delete_plan_management(id):
     try:
         plan_schedule = Plan_Schedule.query.filter_by(id = id).first()
         if plan_schedule == None:

@@ -5,12 +5,10 @@ from models.nin_ingredient_model import NIN_Ingredient
 from models.recipe_model import Recipe
 from models.ingredient_serving_unit_model import IngredientServingUnit
 from models.ingredient_model import Ingredient
-from models.ingredient_nutrition import IngredientNutrition
 from schemas.nin_ingredient_schema import NININgredientSchema
 from schemas.recipe_schema import RecipeSchema
 from schemas.ingredient_schema import IngredientSchema
 from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
-from schemas.ingredient_nutrition_schema import IngredientNutritionSchema
 from time import strftime
 from utils import api_logger, nin_mapping
 import os
@@ -74,10 +72,7 @@ def create_recipe():
 
                 nin_id = suggested_nin_list[0]['id'] if len(suggested_nin_list) else None
 
-                ingredient_data = Ingredient(i['recipe_id'],nin_id, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit'])
-
-                db.session.add(ingredient_data)
-                db.session.flush()
+            
 
                 # map ingredient with NIN table based on standardname
                 if len(suggested_nin_list):
@@ -91,16 +86,22 @@ def create_recipe():
                         micros[key] = float(micros[key]) * multiplication_factor
                         
                     
-                    ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,macros,micros)
+                    # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,macros,micros)
                 else:
                     # if there is no match found insert default data with 0 value
                     filename = os.path.join(dirname, '../seeds/data/nutrition_blueprint.json')
                     with open(filename) as file:
                             data = json.load(file)
-                            ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,data['macros'],data['micros'])
+                            macros = data['macros']
+                            micros = data['micros']
+                            # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,data['macros'],data['micros'])
 
 
-                db.session.add(ingredient_nutrition_data)
+
+                ingredient_data = Ingredient(i['recipe_id'],nin_id, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit'], macros, micros)
+
+                db.session.add(ingredient_data)
+                db.session.flush()
 
             db.session.commit()
         except Exception as e:
@@ -139,21 +140,42 @@ def map_ingredient(ingredient_id, nin_id):
         else:
             ingredient.nin_id = nin_id
             # update nutrition info for particular ingredient
-            updated_ingredient = Ingredient.query.filter(Ingredient.ingredient_standard_name == ingredient.ingredient_standard_name).update({Ingredient.nin_id:nin_id })
+            # updated_ingredient = Ingredient.query.filter(Ingredient.ingredient_standard_name == ingredient.ingredient_standard_name).update({Ingredient.nin_id:nin_id })
             
             # update ingredient nutrition table info
             nin_data = nin_ingredient_schema.dump(nin_ingredient)
+
             ingredient_list = Ingredient.query.filter_by(ingredient_standard_name = ingredient.ingredient_standard_name).all()
             ingredient_list_data = ingredient_schema_list.dump(ingredient_list)
-            for inredient_obj in ingredient_list_data:
-                macros = nin_data['macros']
-                micros = nin_data['micros']
-                multiplication_factor = inredient_obj['quantity_in_gram']/100
-                for key in macros:
-                    macros[key] = float(macros[key]) * multiplication_factor
-                for key in micros:
-                    micros[key] = float(micros[key]) * multiplication_factor
-                IngredientNutrition.query.filter(IngredientNutrition.ingredient_id == inredient_obj['id']).update({IngredientNutrition.macros:macros,IngredientNutrition.micros:micros })
+            
+            nin_macros = nin_data['macros']
+            nin_micros = nin_data['micros']
+            
+            macros={}
+            micros={}
+
+            print('macros before', nin_macros)
+            print('macros before', nin_micros)
+            for ingredient_obj in ingredient_list_data:
+                print('ingredient', ingredient_obj)
+                multiplication_factor = ingredient_obj['quantity_in_gram']/100
+                for key in nin_macros:
+                    print('key', key)
+                    macros[key] = float(nin_macros[key]) * multiplication_factor
+                for key in nin_micros:
+                    micros[key] = float(nin_micros[key]) * multiplication_factor
+                Ingredient.query.filter(Ingredient.id == ingredient_obj['id']).update({Ingredient.macros:macros,Ingredient.micros:micros,Ingredient.nin_id:nin_id  })
+            
+            # ingredient_list_data = ingredient_schema_list.dump(ingredient_list)
+            # for inredient_obj in ingredient_list_data:
+            #     macros = nin_data['macros']
+            #     micros = nin_data['micros']
+            #     multiplication_factor = inredient_obj['quantity_in_gram']/100
+            #     for key in macros:
+            #         macros[key] = float(macros[key]) * multiplication_factor
+            #     for key in micros:
+            #         micros[key] = float(micros[key]) * multiplication_factor
+            #     IngredientNutrition.query.filter(IngredientNutrition.ingredient_id == inredient_obj['id']).update({IngredientNutrition.macros:macros,IngredientNutrition.micros:micros })
                 
 
             db.session.commit()
