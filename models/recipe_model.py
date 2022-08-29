@@ -13,7 +13,7 @@ class Recipe( db.Model):
     recipe_url = db.Column(db.String)
     website_name = db.Column(db.String)
     serving = db.Column(db.Integer)
-    # ingredients = db.relationship('Ingredient', backref='recipe')
+    ingredients = db.relationship('Ingredient', backref='recipe')
 
     deleted = db.Column(db.Boolean, default = False)
     updated_by = db.Column(db.Integer)

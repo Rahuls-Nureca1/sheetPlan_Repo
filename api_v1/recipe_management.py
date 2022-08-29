@@ -42,10 +42,10 @@ def create_recipe():
         ingredient_list = []
         nutrition_data = []
         try:
-            db.session.add(recipe_data)
-            db.session.flush()
+            # db.session.add(recipe_data)
+            # db.session.flush()
             for i in ingredients:
-                i['recipe_id'] = recipe_data.id
+                # i['recipe_id'] = recipe_data.id
                 i['created_by'] = 1
 
                 # find serving_unit_id and calculate quantity_in_gram from ingredient_serving_unit table
@@ -96,9 +96,9 @@ def create_recipe():
                             micros = data['micros']
                             # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,data['macros'],data['micros'])
 
+                ingredient_data = Ingredient(recipe = recipe_data, nin_id = nin_id,ingredient_name=i['ingredient_name'],ingredient_standard_name=i['ingredient_standard_name'],ingredient_desc= i['ingredient_desc'],quantity= i['quantity'],quantity_in_gram=  quantity_in_gram,serving_unit_id = serving_unit_id,serving_unit = i['serving_unit'], macros =macros, micros =micros)
 
-
-                ingredient_data = Ingredient(i['recipe_id'],nin_id, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit'], macros, micros)
+                # ingredient_data = Ingredient(i['recipe_id'],nin_id, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit'], macros =macros, micros =micros)
 
                 db.session.add(ingredient_data)
                 db.session.flush()
@@ -154,13 +154,12 @@ def map_ingredient(ingredient_id, nin_id):
             macros={}
             micros={}
 
-            print('macros before', nin_macros)
-            print('macros before', nin_micros)
+       
             for ingredient_obj in ingredient_list_data:
-                print('ingredient', ingredient_obj)
+              
                 multiplication_factor = ingredient_obj['quantity_in_gram']/100
                 for key in nin_macros:
-                    print('key', key)
+                
                     macros[key] = float(nin_macros[key]) * multiplication_factor
                 for key in nin_micros:
                     micros[key] = float(nin_micros[key]) * multiplication_factor

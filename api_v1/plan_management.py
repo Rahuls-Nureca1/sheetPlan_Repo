@@ -147,7 +147,7 @@ def list_meal_plan_schedule(planId, dayId):
         
 
 
-        return make_response(plan_data, 200)
+        return make_response(data, 200)
     except Exception as e:
         print('exception', e)
 
