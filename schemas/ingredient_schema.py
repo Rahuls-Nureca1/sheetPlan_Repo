@@ -12,5 +12,7 @@ class IngredientSchema(Schema):
     quantity_in_gram = fields.Int()
     serving_unit_id = fields.Int()
     serving_unit = fields.Str()
+    macros = fields.Raw()
+    micros = fields.Raw()
  
         

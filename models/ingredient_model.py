@@ -15,20 +15,25 @@ class Ingredient( db.Model):
     quantity_in_gram = db.Column(db.Integer)
     serving_unit_id = db.Column(db.Integer)
     serving_unit = db.Column(db.String)
+    macros = db.Column(db.JSON, default={})
+    micros = db.Column(db.JSON, default = {})
     updated_by = db.Column(db.Integer)
     create_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    
 
-    nin_ingredient = db.relationship('NIN_Ingredient', backref='plans')
-    recipe = db.relationship('Recipe', backref='days')
+    nin_ingredient = db.relationship('NIN_Ingredient', backref='nin_ingredient')
+    # recipe = db.relationship('Recipe', backref='recipe')
 
-    def __init__(self, recipe_id, nin_id, ingredient_name,ingredient_standard_name, ingredient_desc, quantity, quantity_in_gram, serving_unit_id, serving_unit ) -> None:
-        self.recipe_id = recipe_id
-        self.nin_id = nin_id
-        self.ingredient_name = ingredient_name
-        self.ingredient_standard_name = ingredient_standard_name
-        self.ingredient_desc = ingredient_desc
-        self.quantity = quantity
-        self. quantity_in_gram = quantity_in_gram
-        self.serving_unit_id = serving_unit_id
-        self.serving_unit = serving_unit
+    # def __init__(self, recipe_id, nin_id, ingredient_name,ingredient_standard_name, ingredient_desc, quantity, quantity_in_gram, serving_unit_id, serving_unit, macros, micros ) -> None:
+    #     self.recipe_id = recipe_id
+    #     self.nin_id = nin_id
+    #     self.ingredient_name = ingredient_name
+    #     self.ingredient_standard_name = ingredient_standard_name
+    #     self.ingredient_desc = ingredient_desc
+    #     self.quantity = quantity
+    #     self. quantity_in_gram = quantity_in_gram
+    #     self.serving_unit_id = serving_unit_id
+    #     self.serving_unit = serving_unit
+    #     self.macros = macros
+    #     self.micros = micros
