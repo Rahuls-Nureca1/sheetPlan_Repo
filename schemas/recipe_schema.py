@@ -34,6 +34,7 @@ class RecipeSchema(Schema):
     ingredients = fields.Nested(IngredientSchema, many=True)
     macros = fields.Method("calculate_macros")
     micros= fields.Method("calculate_micros")
+    per_serving = fields.Method("calculate_per_serving")
     def calculate_macros(self, obj):
         macros = []
         
@@ -56,7 +57,6 @@ class RecipeSchema(Schema):
             })
 
         return formated_macros
-    # deleted = fields.Bool()
 
     def calculate_micros(self, obj):
         micros = []
@@ -80,7 +80,18 @@ class RecipeSchema(Schema):
             })
 
         return formated_micros
-    # deleted = fields.Bool()
+   
+    def calculate_per_serving(self, obj):
+        per_serving = 0
+        
+        for i in obj.ingredients:
+            if i.quantity_in_gram != None:
+                per_serving += i.quantity_in_gram
+          
+       
+
+        return per_serving
+   
 
 
         

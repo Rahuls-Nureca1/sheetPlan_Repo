@@ -10,5 +10,12 @@ class PlanScheduleSchema(Schema):
     plan = fields.Nested(PlanSchema, many=False)
     day = fields.Nested(DaySchema, many=False)
     timing = fields.Nested(TimingSchema, many=False)
-    recipes = fields.Nested(RecipeSchema, many=True,  only=('course', 'cusine', 'id','image_path', 'recipe_name','serving','macros', 'micros'))
+    recipes = fields.Nested(RecipeSchema, many=True,  only=('course', 'cusine', 'id','image_path', 'recipe_name','serving','per_serving','macros', 'micros'))
 
+
+class PlanScheduleWithoutRecipeSchema(Schema):
+    id = fields.Int(dump_only=True)
+    plan = fields.Nested(PlanSchema, many=False)
+    day = fields.Nested(DaySchema, many=False)
+    timing = fields.Nested(TimingSchema, many=False)
+  
