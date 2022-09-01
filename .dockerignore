@@ -7,7 +7,7 @@
 **/LICENSE
 **/.vscode
 **/coverage
-**/.env
+# **/.env
 **/.editorconfig
 **/.aws
 **/dist

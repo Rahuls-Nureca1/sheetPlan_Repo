@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN python -m venv .venv && .venv/bin/pip install --no-cache-dir -U pip setuptools
 
-COPY .env ./
+# COPY .env ./
 COPY . ./
 RUN .venv/bin/pip install --no-cache-dir -r requirements.txt
 # RUN .venv/bin/pip install --no-cache-dir -r requirements.txt
@@ -13,7 +13,6 @@ RUN .venv/bin/pip install --no-cache-dir -r requirements.txt
 # RUN chmod 0600 server-ca.pem
 ENV DEBUG:  True
 ENV ENV:  "development"
-ENV SECRET_KEY: "testkey here"
 ENV ENVIRONMENT: 'Development'
 ENV POSTGRES_USERNAME: "postgres"
 ENV POSTGRES_PASSWORD: "ScientistTech123"
