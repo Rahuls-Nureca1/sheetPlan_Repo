@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  api-service:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    # set database, memcached etc credentials
+    environment:
+      PATH: "/app/.venv/bin:$PATH"
+      DEBUG:  True
+      ENV:  "development"
+      SECRET_KEY: testkey here"
+      ENVIRONMENT: Development'
+      POSTGRES_USERNAME: "postgres"
+      POSTGRES_PASSWORD: 123456"
+      POSTGRES_DATABASE: fooddb"
+      POSTGRES_HOSTNAME: localhost"
+      SQLALCHEMY_DATABASE_URI: "postgresql://postgres:123456@localhost:5432/fooddb"
+  
