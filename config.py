@@ -4,7 +4,6 @@ from decouple import config
 class BaseConfig(object):
     DEBUG = False
     UPLOAD_FOLDER = 'tmp'
-    SECRET_KEY = config("SECRET_KEY")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
