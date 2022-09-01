@@ -8,7 +8,7 @@ pipeline {
             steps {
               updateGitlabCommitStatus name: 'build', state: 'pending'
               sh """
-                docker build -t fooddb .
+                docker compose build
               """
               //status update
               updateGitlabCommitStatus name: 'build', state: 'success'
@@ -22,8 +22,7 @@ pipeline {
       steps {
             updateGitlabCommitStatus name: 'deploy', state: 'pending'
         sh """
-          docker stop fooddbbe || true && docker rm fooddbbe || true
-          docker run --name fooddbbe -p 5000:5000 -d fooddb
+          docker compose up -d --no-color --wait
         """
             updateGitlabCommitStatus name: 'deploy', state: 'pending'
 

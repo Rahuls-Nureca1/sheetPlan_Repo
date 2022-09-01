@@ -3,15 +3,6 @@ FROM python:3.8-slim-buster AS builder
 
 WORKDIR /app
 
-ENV DEBUG:  True
-ENV ENV:  "development"
-ENV ENVIRONMENT: 'Development'
-ENV POSTGRES_USERNAME: "postgres"
-ENV POSTGRES_PASSWORD: "ScientistTech123"
-ENV POSTGRES_DATABASE: "fooddb"
-ENV POSTGRES_HOSTNAME: "fooddb.c7vaqyqbsj8o.us-east-2.rds.amazonaws.com"
-
-
 RUN python -m venv .venv && .venv/bin/pip install --no-cache-dir -U pip setuptools
 
 # COPY .env ./
@@ -26,6 +17,8 @@ RUN .venv/bin/pip install --no-cache-dir -r requirements.txt
 # Stage 2 - Copy only necessary files to the runner stage
 FROM python:3.8-slim-buster
 WORKDIR /app
+
+
 COPY --from=builder /app /app
 
 # COPY --from=builder /app /app
@@ -34,6 +27,8 @@ EXPOSE 5000
 
 # Copy the rest of your app's source code from your host to your image filesystem.
 # COPY . ./
+
+
 ENV PATH="/app/.venv/bin:$PATH"
 
 CMD ["python", "wsgi.py"]

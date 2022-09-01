@@ -1,0 +1,19 @@
+version: '3.9' # optional since v1.27.0
+services:
+  fooddb-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fooddb-backend
+    working_dir: /app
+    environment:
+      - POSTGRES_USERNAME=postgres
+      - DEBUG=True
+      - ENV=development
+      - ENVIRONMENT=Development
+      - POSTGRES_PASSWORD=ScientistTech123
+      - POSTGRES_DATABASE=fooddb
+      - POSTGRES_HOSTNAME=fooddb.c7vaqyqbsj8o.us-east-2.rds.amazonaws.com
+
+    ports:
+      - '5000:5000'
