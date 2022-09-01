@@ -1,7 +1,7 @@
+from lib2to3.pytree import Base
 from app import create_app
 from decouple import config as dotconfig
 from config import ProdConfig, DevConfig
-
 
 environment = dotconfig("ENVIRONMENT")
 if environment == 'Production':
