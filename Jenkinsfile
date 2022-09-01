@@ -18,7 +18,7 @@ pipeline {
         
      
     }
-    stage("run") {
+    stage("deploy") {
       steps {
             updateGitlabCommitStatus name: 'deploy', state: 'pending'
         sh """
