@@ -1,7 +1,6 @@
 from datetime import datetime
-from email.policy import default
 
-from extensions import db, login_manager
+from extensions import db
 
 class User( db.Model):
     __tablename__ = "user"
@@ -11,6 +10,7 @@ class User( db.Model):
     last_name = db.Column(db.String(255))
     email = db.Column(db.String(255))
     password = db.Column(db.String(500))
+    create_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
     def __init__(self, first_name, last_name, email, password) -> None:
