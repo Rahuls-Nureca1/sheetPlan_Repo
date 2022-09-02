@@ -12,6 +12,7 @@ from models.plan_model import Plan
 from models.ingredient_serving_unit_model import IngredientServingUnit
 from models.recipe_model import Recipe
 from models.ingredient_model import Ingredient
+from utils.auth_utils import token_required
 
 
 
@@ -83,7 +84,8 @@ def update_nin_ingredient(id):
 # TODO:
 # Implement list NIN Ingredient
 @nin_ingredient_bp.route('/', methods=['GET'])
-def list_nin_ingredient():
+@token_required
+def list_nin_ingredient(current_user):
     try:
         nin = NIN_Ingredient.query.filter_by(deleted = False).all()
         return make_response({"success":True,"data":nin_schema_list.dump(nin)}, 200)

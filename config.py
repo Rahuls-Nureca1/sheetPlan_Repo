@@ -5,6 +5,7 @@ class BaseConfig(object):
     DEBUG = False
     UPLOAD_FOLDER = 'tmp'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = config("SECRET_KEY")
 
 
 class DevConfig(BaseConfig):
