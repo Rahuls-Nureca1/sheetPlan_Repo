@@ -20,7 +20,7 @@ pipeline {
         
      
     }
-    stage("deploy") {
+    stage("run") {
       steps {
             updateGitlabCommitStatus name: 'deploy', state: 'pending'
         sh """
@@ -29,7 +29,7 @@ pipeline {
 
         //           docker stop fooddbbe || true && docker rm fooddbbe || true
         //  docker run --name fooddbbe -p 5000:5000 -d fooddb
-            updateGitlabCommitStatus name: 'deploy', state: 'pending'
+            updateGitlabCommitStatus name: 'deploy', state: 'success'
 
       }
     }
