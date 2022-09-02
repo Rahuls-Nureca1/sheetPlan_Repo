@@ -2,22 +2,16 @@ pipeline {
  agent any
   stages {
     stage("build") {
-      
-         
               // your build steps
             steps {
               updateGitlabCommitStatus name: 'build', state: 'pending'
               sh """
                 docker compose build
               """
-
               //  docker build -t fooddb .
               //status update
               updateGitlabCommitStatus name: 'build', state: 'success'
           }
-       
-
-        
      
     }
     stage("run") {
