@@ -2,19 +2,8 @@ from flask import Blueprint, request, jsonify, make_response
 from extensions import db
 from models.nin_ingredient_model import NIN_Ingredient
 from schemas.nin_ingredient_schema import NININgredientSchema
-from time import strftime
 from utils import api_logger
-
-
-from models.day_model import Day
-from models.timing_model import Timing
-from models.plan_model import Plan
-from models.ingredient_serving_unit_model import IngredientServingUnit
-from models.recipe_model import Recipe
-from models.ingredient_model import Ingredient
-
-
-
+from utils.auth_utils import token_required
 
 nin_ingredient_bp = Blueprint('nin_ingredient', __name__)
 
@@ -25,7 +14,8 @@ nin_schema_list = NININgredientSchema(many = True)
 # TODO:
 # Implement create NIN Ingredient
 @nin_ingredient_bp.route('/', methods=['POST'])
-def create_nin_ingredient():
+@token_required
+def create_nin_ingredient(auth_data):
     try:
         req_body = request.get_json()
         nin = NIN_Ingredient.query.filter_by(nin_code = req_body['nin_code']).first()
@@ -43,7 +33,8 @@ def create_nin_ingredient():
 # TODO:
 # Implement delete NIN Ingredient
 @nin_ingredient_bp.route('/<id>', methods=['DELETE'])
-def delete_nin_ingredient(id):
+@token_required
+def delete_nin_ingredient(auth_data,id):
     try:
         nin = NIN_Ingredient.query.filter_by(id = id).first()
         if nin == None:
@@ -61,7 +52,8 @@ def delete_nin_ingredient(id):
 # TODO:
 # Implement update NIN Ingredient
 @nin_ingredient_bp.route('/<id>', methods=['PUT'])
-def update_nin_ingredient(id):
+@token_required
+def update_nin_ingredient(auth_data,id):
     try:
         payload = request.get_json()
         nin = NIN_Ingredient.query.filter_by(id = id).first()
@@ -83,7 +75,8 @@ def update_nin_ingredient(id):
 # TODO:
 # Implement list NIN Ingredient
 @nin_ingredient_bp.route('/', methods=['GET'])
-def list_nin_ingredient():
+@token_required
+def list_nin_ingredient(auth_data):
     try:
         nin = NIN_Ingredient.query.filter_by(deleted = False).all()
         return make_response({"success":True,"data":nin_schema_list.dump(nin)}, 200)
@@ -93,7 +86,8 @@ def list_nin_ingredient():
 # TODO:
 # Implement get NIN Ingredient by id
 @nin_ingredient_bp.route('/<id>', methods=['GET'])
-def nin_ingredient_by_id(id):
+@token_required
+def nin_ingredient_by_id(auth_data,id):
     try:
         nin = NIN_Ingredient.query.filter_by(deleted = False,id = id).first()
         if nin == None:

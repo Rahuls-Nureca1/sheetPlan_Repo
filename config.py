@@ -4,8 +4,8 @@ from decouple import config
 class BaseConfig(object):
     DEBUG = False
     UPLOAD_FOLDER = 'tmp'
-    SECRET_KEY = config("SECRET_KEY")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = config("SECRET_KEY")
 
 
 class DevConfig(BaseConfig):
@@ -22,4 +22,5 @@ class ProdConfig(BaseConfig):
     psql_username = config("POSTGRES_USERNAME")
     psql_password = config("POSTGRES_PASSWORD")
     psql_database = config("POSTGRES_DATABASE")
-    SQLALCHEMY_DATABASE_URI = f'postgresql://{psql_username}:{psql_password}@localhost:5432/{psql_database}'
+    psql_host = config("POSTGRES_HOSTNAME")
+    SQLALCHEMY_DATABASE_URI = f'postgresql://{psql_username}:{psql_password}@{psql_host}:5432/{psql_database}'

@@ -55,7 +55,8 @@ def get_plan_type():
     try:
         plan = Plan.query.all()
         data = plan_schema_list.dump(plan)
-        return make_response(data, 200)
+        print('data', data)
+        return jsonify(data)
     except Exception as e:
         print('exception', e)
 
@@ -113,7 +114,7 @@ def get_days():
     try:
         days = Day.query.all()
         data = day_schema_list.dump(days)
-        return make_response(data, 200)
+        return jsonify(data)    
     except Exception as e:
         print('exception', e)
 
@@ -174,7 +175,7 @@ def get_timings():
     try:
         timings = Timing.query.all()
         data = timing_schema_list.dump(timings)
-        return make_response(data, 200)
+        return jsonify(data)
     except Exception as e:
         print('exception', e)
 
@@ -408,10 +409,10 @@ def list_meal_plan_schedule(planId, dayId):
             print('plan', plan)
 
         print("data",data)
-        
 
+        return jsonify(data)
 
-        return make_response(data, 200)
+      
     except Exception as e:
         print('exception', e)
 
