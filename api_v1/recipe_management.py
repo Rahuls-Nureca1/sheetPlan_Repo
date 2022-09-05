@@ -1,3 +1,4 @@
+from cmath import log
 import json
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -61,8 +62,14 @@ def create_recipe():
                 if matched_serving_unit != None:
                     serving_unit_id = matched_serving_unit['id']
                     serving_size = matched_serving_unit['serving_unit_quantity']
-                quantity_in_gram = i['quantity_in_gram'] if i['quantity_in_gram'] != None else serving_size * i['quantity']
+
+
+                if i['quantity_in_gram'] != None:
+                    serving_size = i['quantity_in_gram']
+               
+                quantity_in_gram = serving_size * i['quantity']
                 
+
                
 
                 # ingredient_list.append(Ingredient(i['recipe_id'],None, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit']))
@@ -114,6 +121,100 @@ def create_recipe():
     except Exception as e:
         print('in catch', e)
         return jsonify(str(e))
+
+
+# TODO:
+# Implement create recipe
+@recipe_management_bp.route('/nin_recipe', methods=['POST'])
+def create_nin_recipe():
+    try:
+        serving_data = IngredientServingUnit.query.all()
+        serving_unit_list = serving_unit_schema_list.dump(serving_data)
+
+        req_body = request.get_json()
+
+        print(req_body)
+        try:
+            for item in req_body:
+                recipe_data = Recipe(item['recipe_name'],item['image_path'],[],[],'','NIN',item['serving'], 1)
+                ingredient_serving_unit = item['serving_unit'].lower()
+            
+                matched_serving_unit = None
+
+                for serving_unit in serving_unit_list:
+                    if ingredient_serving_unit == serving_unit['serving_unit_name'].lower() or ingredient_serving_unit in serving_unit['serving_unit_othername']:
+                        matched_serving_unit = serving_unit
+                        break
+                quantity_in_gram = 0  
+                if matched_serving_unit != None:
+                    serving_unit_id = matched_serving_unit['id']
+                    serving_size = matched_serving_unit['serving_unit_quantity']
+
+               
+                if item['quantity_in_gram'] != None:
+                    serving_size = item['quantity_in_gram']
+                quantity_in_gram =  serving_size * item['serving']
+
+
+                #find maping from nin table - nin_code is blank
+                if item['nin_code'] == "":
+
+                    suggested_nin_list = nin_mapping.map_ingredient(item['recipe_name'])
+
+                    nin_id = suggested_nin_list[0]['id'] if len(suggested_nin_list) else None
+
+                else:
+                    nin =  NIN_Ingredient.query.filter(NIN_Ingredient.nin_code == item['nin_code']).first()
+                    print('nin', nin)
+                    nin_data = nin_ingredient_schema.dump(nin)
+                    print('nindata', nin.id)
+                    nin_id = nin.id
+                    suggested_nin_list  = []
+                    suggested_nin_list.append(nin_data)
+
+
+                # map ingredient with NIN table based on standardname
+                if len(suggested_nin_list):
+                    # if there is more than one match take the best match
+                    macros = suggested_nin_list[0]['macros']
+                    micros = suggested_nin_list[0]['micros']
+                    multiplication_factor = quantity_in_gram/100
+                    for key in macros:
+                        macros[key] = float(macros[key]) * multiplication_factor
+                    for key in micros:
+                        micros[key] = float(micros[key]) * multiplication_factor
+                
+            
+                # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,macros,micros)
+                else:
+                    # if there is no match found insert default data with 0 value
+                    filename = os.path.join(dirname, '../seeds/data/nutrition_blueprint.json')
+                    with open(filename) as file:
+                            data = json.load(file)
+                            macros = data['macros']
+                            micros = data['micros']
+                    # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,data['macros'],data['micros'])
+
+                ingredient_data = Ingredient(recipe = recipe_data, nin_id = nin_id,ingredient_name=item['recipe_name'],ingredient_standard_name=item['recipe_name'],ingredient_desc= "",quantity= item['serving'],quantity_in_gram=  quantity_in_gram,serving_unit_id = serving_unit_id,serving_unit = item['serving_unit'], macros =macros, micros =micros)
+
+                # ingredient_data = Ingredient(i['recipe_id'],nin_id, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit'], macros =macros, micros =micros)
+
+                print(ingredient_data)
+                db.session.add(ingredient_data)
+                db.session.flush()
+                db.session.commit()
+        except Exception as e:
+            print('exceptions', e)
+            db.session.rollback()    
+        
+        db.session.commit()
+      
+        return make_response({"success":"Recipe created successfully"}, 201)
+    except Exception as e:
+        print('in catch', e)
+        return jsonify(str(e))
+
+
 
 # TODO:
 # Implement update recipe

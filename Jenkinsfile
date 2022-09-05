@@ -6,6 +6,7 @@ pipeline {
             steps {
               updateGitlabCommitStatus name: 'build', state: 'pending'
               sh """
+                docker compose down
                 docker compose build
               """
               //  docker build -t fooddb .

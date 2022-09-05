@@ -1,4 +1,9 @@
 [
+    {"plan_name":  "Pre-Diabetes-North-Veg"},
+    {"plan_name":  "Pre-Diabetes-North-Non-Veg"},
+    {"plan_name":  "Pre-Diabetes-South-Non-Veg"},
+    {"plan_name":  "Pre-Diabetes-South-Veg"},
+    
     {"plan_name":  "Diabetes-North-Veg"},
     {"plan_name":  "Diabetes-North-Non-Veg"},
     {"plan_name":  "Diabetes-South-Non-Veg"},
