@@ -54,7 +54,7 @@ class RecipeSchema(Schema):
         for key in res:
             formated_macros.append({
                 'key': key,
-                'value': int(res[key]),
+                'value': float(res[key]),
                 'unit': 'g' if key != 'energy' else 'kcal'
             })
 

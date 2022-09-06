@@ -26,7 +26,8 @@
       {"serving_unit_name":"Ounce","serving_unit_othername":"[ounce,oz]","serving_unit_quantity": 28},
       {"serving_unit_name":"Liter","serving_unit_othername":"[liter,lt]","serving_unit_quantity": 1000},
       {"serving_unit_name":"Pack","serving_unit_othername":"[pack]","serving_unit_quantity": 100},
-      {"serving_unit_name":"Pinch","serving_unit_othername":"[pinch]","serving_unit_quantity": 1}
+      {"serving_unit_name":"Pinch","serving_unit_othername":"[pinch]","serving_unit_quantity": 1},
+      {"serving_unit_name":"","serving_unit_othername":"","serving_unit_quantity": 0}
     
     ]
 }

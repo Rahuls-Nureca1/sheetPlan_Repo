@@ -15,12 +15,15 @@ class Planned_Meal(db.Model):
     recipe = db.relationship('Recipe', backref= 'planned_meal')
     schedule_id = db.Column(db.Integer,db.ForeignKey("plan_schedule.id"))
     plan_schedule = db.relationship('Plan_Schedule', backref = 'planned_meal')
+    serving_unit_id = db.Column(db.Integer,db.ForeignKey("ingredient_serving_unit.id"))
+    serving = db.relationship('IngredientServingUnit', backref = 'planned_meal')
     quantity = db.Column(db.Integer)
     
-    def __init__(self, recipe_id, schedule_id,quantity ) -> None:
+    def __init__(self, recipe_id, schedule_id,serving_unit_id, quantity ) -> None:
         self.recipe_id = recipe_id
         self.schedule_id = schedule_id
         self.quantity = quantity
+        self.serving_unit_id = serving_unit_id
 
 class Plan_Schedule( db.Model):
     __tablename__ = "plan_schedule"
@@ -35,6 +38,9 @@ class Plan_Schedule( db.Model):
     day = db.relationship('Day', backref='plan_schedule')
     timing = db.relationship('Timing', backref='plan_schedule')
     recipes = db.relationship('Recipe',secondary='planned_meal', backref = 'plan_schedule')
+    servings = db.relationship('IngredientServingUnit', secondary='planned_meal', backref = 'plan_schedule', )
+
+
     def __init__(self, plan_id, day_id, time_id, updated_by ) -> None:
         self.plan_id = plan_id
         self.day_id = day_id

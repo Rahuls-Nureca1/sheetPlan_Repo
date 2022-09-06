@@ -357,7 +357,7 @@ def create_meal_plan():
 
         
        
-        a = Planned_Meal(recipe_id,schedule_id,quantity)
+        a = Planned_Meal(recipe_id,schedule_id,serving_unit_id,quantity)
         db.session.add(a)
         # db.session.execute(Planned_Meal.insert(),params={"recipe_id": recipe_id, "serving_unit_id": serving_unit_id, "schedule_id": schedule_id,"quantity":quantity},)         
         db.session.commit()
@@ -426,16 +426,21 @@ def list_meal_plan_schedule(planId, dayId):
             # plan['recipes']['macros'] = {}
             # plan['recipes']['micros'] = {}
             # print('plan recipes', plan['recipes'])
-            for recipe in plan['recipes']:
+            # for recipe in plan['recipes']:
+            for i in range(len(plan['recipes'])):
+                # print('test', plan['recipes'][i]['id'])
                 
-                planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == recipe['id'], Planned_Meal.schedule_id == plan['id']).first()
+                planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == plan['recipes'][i]['id'], Planned_Meal.schedule_id == plan['id']).first()
+                # print('test meal data', planned_meal_data)
+
                 meal_data = plan_meal_schema.dump(planned_meal_data)
-                print('planned_meal_data',meal_data)
-                recipe['qty'] = meal_data['quantity']
+                # print('planned_meal_data',meal_data)
+                plan['recipes'][i]['qty'] = meal_data['quantity']
                
-            #     plan['recipes'][i]['serving'] =  plan['servings'][i]
+                plan['recipes'][i]['serving'] =  plan['servings']
                
                 # recipe['serving'] = plan['servings'][index]
+                # print('planserving', plan['servings'][i])
 
             data[plan['timing']['timing_label']] = plan['recipes']
             print('plan', plan)

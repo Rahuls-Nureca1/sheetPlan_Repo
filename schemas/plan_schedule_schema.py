@@ -21,6 +21,7 @@ class PlanScheduleSchema(Schema):
     day = fields.Nested(DaySchema, many=False)
     timing = fields.Nested(TimingSchema, many=False)
     recipes = fields.Nested(RecipeSchema, many=True)
+    servings = fields.Nested(IngredientServingUnitSchema, many=True)
     # quantity = fields.Nested(PlannedMealSchema, many=True)
 
 

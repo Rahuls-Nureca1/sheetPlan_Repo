@@ -89,9 +89,9 @@ def create_recipe():
                     micros = suggested_nin_list[0]['micros']
                     multiplication_factor = quantity_in_gram/100
                     for key in macros:
-                        macros[key] = float(macros[key]) * multiplication_factor
+                        macros[key] = round(float(macros[key]) * multiplication_factor, 2)
                     for key in micros:
-                        micros[key] = float(micros[key]) * multiplication_factor
+                        micros[key] =  round(float(micros[key]) * multiplication_factor,3)
                         
                     
                     # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,macros,micros)
@@ -181,9 +181,9 @@ def create_nin_recipe():
                     micros = suggested_nin_list[0]['micros']
                     multiplication_factor = quantity_in_gram/100
                     for key in macros:
-                        macros[key] = float(macros[key]) * multiplication_factor
+                        macros[key] =  round(float(macros[key]) * multiplication_factor,2)
                     for key in micros:
-                        micros[key] = float(micros[key]) * multiplication_factor
+                        micros[key] = round(float(micros[key]) * multiplication_factor,3)
                 
             
                 # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,macros,micros)
@@ -327,9 +327,9 @@ def add_recipe_ingredient(recipe_id):
                     micros = suggested_nin_list[0]['micros']
                     multiplication_factor = quantity_in_gram/100
                     for key in macros:
-                        macros[key] = float(macros[key]) * multiplication_factor
+                        macros[key] = round(float(macros[key]) * multiplication_factor,2)
                     for key in micros:
-                        micros[key] = float(micros[key]) * multiplication_factor
+                        micros[key] = round(float(micros[key]) * multiplication_factor,3)
                         
                     
                     # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,macros,micros)
@@ -412,9 +412,9 @@ def update_recipe_ingredient(ingredient_id):
                     micros = suggested_nin_list[0]['micros']
                     multiplication_factor = quantity_in_gram/100
                     for key in macros:
-                        macros[key] = float(macros[key]) * multiplication_factor
+                        macros[key] = round(float(macros[key]) * multiplication_factor,2)
                     for key in micros:
-                        micros[key] = float(micros[key]) * multiplication_factor
+                        micros[key] = round(float(micros[key]) * multiplication_factor,3)
                         
                     
                     # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,macros,micros)
@@ -532,9 +532,9 @@ def map_ingredient(ingredient_id, nin_id):
             multiplication_factor = ingredient_obj['quantity_in_gram']/100
             for key in nin_macros:
             
-                macros[key] = float(nin_macros[key]) * multiplication_factor
+                macros[key] = round(float(nin_macros[key]) * multiplication_factor,2)
             for key in nin_micros:
-                micros[key] = float(nin_micros[key]) * multiplication_factor
+                micros[key] = round(float(nin_micros[key]) * multiplication_factor,3)
             Ingredient.query.filter(Ingredient.id == ingredient_obj['id']).update({Ingredient.macros:macros,Ingredient.micros:micros,Ingredient.nin_id:nin_id  })
         
             # ingredient_list_data = ingredient_schema_list.dump(ingredient_list)
