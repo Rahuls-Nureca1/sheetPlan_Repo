@@ -1,3 +1,4 @@
+from statistics import quantiles
 from marshmallow import Schema, fields
 from models.plan_schedule_model import Planned_Meal
 from schemas.plan_schema import PlanSchema
@@ -7,20 +8,20 @@ from schemas.timing_schema import TimingSchema
 from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
 
 class PlannedMealSchema(Schema):
-    recipe = fields.Nested(RecipeSchema)
+    quantity = fields.Int()
+    # class Meta:
+    #     model = Planned_Meal
+    #     fields = [ 'quantity', 'recipe']
 
-    class Meta:
-        fields = ('id', 'recipe', 'quantity')
-        ordered = True
+ 
 
 class PlanScheduleSchema(Schema):
-    id = fields.Int(dump_only=True)
+    id = fields.Int()
     plan = fields.Nested(PlanSchema, many=False)
     day = fields.Nested(DaySchema, many=False)
     timing = fields.Nested(TimingSchema, many=False)
     recipes = fields.Nested(RecipeSchema, many=True)
-    quantity = fields.Nested(Planned_Meal, many=False)
-    # servings = fields.Nested(IngredientServingUnitSchema, many=True)
+    # quantity = fields.Nested(PlannedMealSchema, many=True)
 
 
 
