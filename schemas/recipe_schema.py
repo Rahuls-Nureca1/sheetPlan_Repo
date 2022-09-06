@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields
 import datetime
+from models.plan_schedule_model import Planned_Meal
 from schemas.ingredient_schema import IngredientSchema
 import collections
 import functools
@@ -35,6 +36,7 @@ class RecipeSchema(Schema):
     macros = fields.Method("calculate_macros")
     micros= fields.Method("calculate_micros")
     per_serving = fields.Method("calculate_per_serving")
+    plan_Schedule = fields.Nested(Planned_Meal,many=True)
     def calculate_macros(self, obj):
         macros = []
         
@@ -52,7 +54,7 @@ class RecipeSchema(Schema):
         for key in res:
             formated_macros.append({
                 'key': key,
-                'value': int(res[key]),
+                'value': float(res[key]),
                 'unit': 'g' if key != 'energy' else 'kcal'
             })
 
