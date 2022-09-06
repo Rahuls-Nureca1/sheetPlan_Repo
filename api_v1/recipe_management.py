@@ -3,7 +3,7 @@ import json
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
 from models.nin_ingredient_model import NIN_Ingredient
-from models.recipe_model import Recipe
+from models.plan_schedule_model import Recipe
 from models.ingredient_serving_unit_model import IngredientServingUnit
 from models.ingredient_model import Ingredient
 from schemas.nin_ingredient_schema import NININgredientSchema
@@ -13,6 +13,7 @@ from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
 from time import strftime
 from utils import api_logger, nin_mapping
 import os
+from models.plan_schedule_model import Planned_Meal
 dirname = os.path.dirname(__file__)
 
 recipe_management_bp = Blueprint('recipe_management', __name__)

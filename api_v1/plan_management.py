@@ -1,7 +1,7 @@
 from cmath import log
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
-from models.plan_schedule_model import Plan_Schedule
+from models.plan_schedule_model import Plan_Schedule, Planned_Meal
 from schemas.plan_schedule_schema import PlanScheduleSchema
 from schemas.plan_schedule_schema import PlanScheduleWithoutRecipeSchema
 
@@ -15,13 +15,12 @@ from schemas.plan_schema import PlanSchema
 
 
 
-from models.plan_schedule_model import planned_meal
+
 
 from models.ingredient_serving_unit_model import IngredientServingUnit
-# from schemas.planned_meal_schema import PlannedMealSchema
 
 
-from models.recipe_model import Recipe
+from models.plan_schedule_model import Recipe
 from schemas.recipe_schema import RecipeSchema
 
 from time import strftime
@@ -349,11 +348,15 @@ def create_meal_plan():
         if serving == None:
             return make_response({"success":False,"message":"serving unit Id not found"}, 404)
 
-        # print('planed schedule', plan_schedule)
-        # print('recipe', recipe)
+        print('planed schedule', plan_schedule)
+        print('recipe', recipe)
         # plan_schedule.recipes.append(recipe)
 
-        db.session.execute(planned_meal.insert(),params={"recipe_id": recipe_id, "serving_unit_id": serving_unit_id, "schedule_id": schedule_id,"quantity":quantity},)         
+        
+       
+        a = Planned_Meal(recipe_id,schedule_id,quantity)
+        db.session.add(a)
+        # db.session.execute(Planned_Meal.insert(),params={"recipe_id": recipe_id, "serving_unit_id": serving_unit_id, "schedule_id": schedule_id,"quantity":quantity},)         
         db.session.commit()
         return make_response({"success":"Meal planned successfully"}, 201)
     except Exception as e:
@@ -397,8 +400,9 @@ def list_meal_plan_schedule(planId, dayId):
     try:
         
         plan_schedule_data = Plan_Schedule.query.filter_by(plan_id = planId, day_id = dayId).all()
+        print('plan_schedule_data', len(plan_schedule_data[0].recipes))
         plan_data = plan_schedule_schema_list.dump(plan_schedule_data)
-
+        print('plan_data', plan_data)
         if len(plan_data) == 0:
            return make_response({"success":False,"message":"Invalid plan id or day id"}, 200)
 
@@ -415,10 +419,10 @@ def list_meal_plan_schedule(planId, dayId):
         for plan in plan_data:
             # plan['recipes']['macros'] = {}
             # plan['recipes']['micros'] = {}
-            print('plan recipes', plan['recipes'])
-            for i in range(len(plan['recipes'])):
+            # print('plan recipes', plan['recipes'])
+            # for i in range(len(plan['recipes'])):
                
-                plan['recipes'][i]['serving'] =  plan['servings'][i]
+            #     plan['recipes'][i]['serving'] =  plan['servings'][i]
                
                 # recipe['serving'] = plan['servings'][index]
 
