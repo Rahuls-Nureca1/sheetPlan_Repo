@@ -4,7 +4,8 @@ from extensions import db
 
 planned_meal = db.Table('planned_meal',
                 db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
-                db.Column('schedule_id', db.Integer, db.ForeignKey('plan_schedule.id'))
+                db.Column('schedule_id', db.Integer, db.ForeignKey('plan_schedule.id')),
+                db.Column('serving_unit_id', db.Integer, db.ForeignKey('ingredient_serving_unit.id'))
                 )
 
 class Plan_Schedule( db.Model):
@@ -20,6 +21,7 @@ class Plan_Schedule( db.Model):
     day = db.relationship('Day', backref='plan_schedule')
     timing = db.relationship('Timing', backref='plan_schedule')
     recipes = db.relationship('Recipe', secondary=planned_meal, backref = 'plan_schedule', )
+    servings = db.relationship('IngredientServingUnit', secondary=planned_meal, backref = 'plan_schedule', )
 
     def __init__(self, plan_id, day_id, time_id, updated_by ) -> None:
         self.plan_id = plan_id

@@ -15,7 +15,9 @@ from schemas.plan_schema import PlanSchema
 
 
 
-# from models.planed_meal_model import PlannedMeal
+from models.plan_schedule_model import planned_meal
+
+from models.ingredient_serving_unit_model import IngredientServingUnit
 # from schemas.planned_meal_schema import PlannedMealSchema
 
 
@@ -332,6 +334,8 @@ def create_meal_plan():
 
         recipe_id = req_body['recipe_id']
         schedule_id = req_body['schedule_id']
+        serving_unit_id = req_body['serving_unit_id']
+        quantity = req_body['quantity']
 
         plan_schedule = Plan_Schedule.query.filter_by(id = schedule_id).first()
         if plan_schedule == None:
@@ -341,9 +345,15 @@ def create_meal_plan():
         if recipe == None:
             return make_response({"success":False,"message":"recipe Id not found"}, 404)
 
-        print('planed schedule', plan_schedule)
-        print('recipe', recipe)
-        plan_schedule.recipes.append(recipe)
+        serving = IngredientServingUnit.query.filter_by(id = serving_unit_id).first()
+        if serving == None:
+            return make_response({"success":False,"message":"serving unit Id not found"}, 404)
+
+        # print('planed schedule', plan_schedule)
+        # print('recipe', recipe)
+        # plan_schedule.recipes.append(recipe)
+
+        db.session.execute(planned_meal.insert(),params={"recipe_id": recipe_id, "serving_unit_id": serving_unit_id, "schedule_id": schedule_id,"quantity":quantity},)         
         db.session.commit()
         return make_response({"success":"Meal planned successfully"}, 201)
     except Exception as e:
@@ -405,10 +415,17 @@ def list_meal_plan_schedule(planId, dayId):
         for plan in plan_data:
             # plan['recipes']['macros'] = {}
             # plan['recipes']['micros'] = {}
+            print('plan recipes', plan['recipes'])
+            for i in range(len(plan['recipes'])):
+               
+                plan['recipes'][i]['serving'] =  plan['servings'][i]
+               
+                # recipe['serving'] = plan['servings'][index]
+
             data[plan['timing']['timing_label']] = plan['recipes']
             print('plan', plan)
 
-        print("data",data)
+        # print("data",data)
 
         return jsonify(data)
 
