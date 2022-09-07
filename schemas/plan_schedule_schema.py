@@ -5,7 +5,7 @@ from schemas.plan_schema import PlanSchema
 from schemas.day_schema import DaySchema
 from schemas.recipe_schema import RecipeSchema
 from schemas.timing_schema import TimingSchema
-from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
+from schemas.ingredient_serving_unit_schema import ServingUnitSchema
 
 class PlannedMealSchema(Schema):
     quantity = fields.Int()
@@ -21,7 +21,7 @@ class PlanScheduleSchema(Schema):
     day = fields.Nested(DaySchema, many=False)
     timing = fields.Nested(TimingSchema, many=False)
     recipes = fields.Nested(RecipeSchema, many=True)
-    servings = fields.Nested(IngredientServingUnitSchema, many=True)
+    servings = fields.Nested(ServingUnitSchema, many=True)
     # quantity = fields.Nested(PlannedMealSchema, many=True)
 
 

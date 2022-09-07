@@ -11,3 +11,11 @@ class IngredientServingUnitSchema(Schema):
   
 
         
+class ServingUnitSchema(Schema):
+    # id = fields.Int(dump_only = True)
+    # serving_unit_othername = fields.Str()
+    unit = fields.Str(attribute="serving_unit_name")
+    size = fields.Int(attribute="serving_unit_quantity")
+  
+
+        

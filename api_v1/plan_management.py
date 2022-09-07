@@ -435,9 +435,10 @@ def list_meal_plan_schedule(planId, dayId):
 
                 meal_data = plan_meal_schema.dump(planned_meal_data)
                 # print('planned_meal_data',meal_data)
-                plan['recipes'][i]['qty'] = meal_data['quantity']
+                # plan['recipes'][i]['qty'] = meal_data['quantity']
                
                 plan['recipes'][i]['serving'] =  plan['servings']
+                plan['recipes'][i]['serving'][0]['quantity'] = meal_data['quantity']
                
                 # recipe['serving'] = plan['servings'][index]
                 # print('planserving', plan['servings'][i])
