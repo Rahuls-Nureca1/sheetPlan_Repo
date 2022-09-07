@@ -257,6 +257,26 @@ def recipe_list(offset,limit):
 
 
 # TODO:
+# Implement search recipe with pagination
+@recipe_management_bp.route('/<offset>/<limit>/<recipe_name>', methods=['GET'])
+def recipe_list_search(offset,limit, recipe_name):
+    try:
+
+        print('ofset', offset)
+        recipe = Recipe.query.filter(Recipe.deleted == False, Recipe.recipe_name.ilike(recipe_name)).order_by(Recipe.create_at.desc()).paginate(page=int(offset),error_out=False, per_page=int(limit))
+        print('recipe', recipe.items)
+        if recipe == None:
+            return make_response({"success":True,"data":[]}, 200)
+
+        recipe_data = recipe_schema_list.dump(recipe.items)
+
+        return make_response({"success":True,"data":recipe_data}, 200)
+    except Exception as e:
+        print('exception', e)
+
+
+
+# TODO:
 # Implement delete recipe 
 @recipe_management_bp.route('/<id>', methods=['DELETE'])
 def delete_recipe(id):
