@@ -22,7 +22,7 @@ Flask API for meal management and recipe management.
 ---  
 
 ### Database Architecture
-![Architecture](housedoc_architecture.png)
+![Architecture](FoodDB_db_schema_v1.0.drawio.png)
 Edit diagram here: https://drive.google.com/file/d/1caNbffsqkHGGq422AAh7hidWJUZFdmVT/view?usp=sharing
 ---
 
