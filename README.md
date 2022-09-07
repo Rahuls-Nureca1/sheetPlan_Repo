@@ -21,7 +21,7 @@ Flask API for meal management and recipe management.
  - Postgres - https://www.postgresql.org/
 ---  
 
-### Database Architecture
+#### Database Architecture
 ![Architecture](FoodDB_db_schema_v1.0.drawio.png)
 Edit diagram here: https://drive.google.com/file/d/1caNbffsqkHGGq422AAh7hidWJUZFdmVT/view?usp=sharing
 ---
