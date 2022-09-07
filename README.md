@@ -44,6 +44,10 @@ Edit diagram here: https://drive.google.com/file/d/1caNbffsqkHGGq422AAh7hidWJUZF
 - **schemas** - this directory will contain all the marshmallow schemas for serializing and deserializing data
 - **seeds** - this directory will contain all the seeders like serving units, NIN etc.
 
+### API specs
+https://documenter.getpostman.com/view/21571234/VUxRNRT7#f89842db-0f27-4cf6-8a0d-39dbfe914204
+
+
 ### Installation
 
 Food DB API  requires [Python](https://www.python.org/downloads/release/python-380/) 3.8 to run.
