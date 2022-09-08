@@ -125,6 +125,109 @@ def create_recipe():
 
 
 # TODO:
+# Implement create multiple recipe
+@recipe_management_bp.route('/multiple-recipe', methods=['POST'])
+def create_multiple_recipe():
+    try:
+        serving_data = IngredientServingUnit.query.all()
+        serving_unit_list = serving_unit_schema_list.dump(serving_data)
+
+        req_body = request.get_json()
+
+        for recipe in req_body:
+            ingredient_list = []    
+            print('recipe %s started' % recipe['recipe_name'])
+            recipe_data = Recipe(recipe['recipe_name'],recipe['image_path'],recipe['course'],recipe['cusine'],recipe['recipe_url'],recipe['website_name'],recipe['serving'], 1)
+            ingredients = recipe['ingredients']
+            try:
+                for i in ingredients:
+                    i['created_by'] = 1
+                    # find serving_unit_id and calculate quantity_in_gram from ingredient_serving_unit table
+                    ingredient_serving_unit = i['serving_unit'].lower()
+                    matched_serving_unit = None
+                    serving_unit_id = None
+                    serving_size = 0
+
+                    for serving_unit in serving_unit_list:
+                        if ingredient_serving_unit == serving_unit['serving_unit_name'].lower() or ingredient_serving_unit in serving_unit['serving_unit_othername']:
+                            matched_serving_unit = serving_unit
+                            break
+                    if matched_serving_unit != None:
+                        serving_unit_id = matched_serving_unit['id']
+                        serving_size = matched_serving_unit['serving_unit_quantity']
+
+
+                    if i['quantity_in_gram'] != None:
+                        serving_size = i['quantity_in_gram']
+                
+                    quantity_in_gram = serving_size * i['quantity']
+                    
+
+                
+
+                    # ingredient_list.append(Ingredient(i['recipe_id'],None, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit']))
+                    
+                    #find maping from nin table
+                    suggested_nin_list = nin_mapping.map_ingredient(i['ingredient_standard_name'])
+
+                    nin_id = suggested_nin_list[0]['id'] if len(suggested_nin_list) else None
+
+                
+
+                    # map ingredient with NIN table based on standardname
+                    if len(suggested_nin_list):
+                        # if there is more than one match take the best match
+                        macros = suggested_nin_list[0]['macros']
+                        micros = suggested_nin_list[0]['micros']
+                        print('macros', macros)
+                        print('micros', micros)
+                        multiplication_factor = quantity_in_gram/100
+                        for key in macros:
+                            if macros[key] == '':
+                                macros[key] = 0
+                            macros[key] = round(float(macros[key]) * multiplication_factor, 2)
+                        for key in micros:
+                            if micros[key] == '':
+                                micros[key] = 0
+                            micros[key] =  round(float(micros[key]) * multiplication_factor,3)
+                            
+                        
+                        # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,macros,micros)
+                    else:
+                        # if there is no match found insert default data with 0 value
+                        filename = os.path.join(dirname, '../seeds/data/nutrition_blueprint.json')
+                        with open(filename) as file:
+                                data = json.load(file)
+                                macros = data['macros']
+                                micros = data['micros']
+                                # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,data['macros'],data['micros'])
+
+                    ingredient_data = Ingredient(recipe = recipe_data, nin_id = nin_id,ingredient_name=i['ingredient_name'],ingredient_standard_name=i['ingredient_standard_name'],ingredient_desc= i['ingredient_desc'],quantity= i['quantity'],quantity_in_gram=  quantity_in_gram,serving_unit_id = serving_unit_id,serving_unit = i['serving_unit'], macros =macros, micros =micros)
+
+                    # ingredient_data = Ingredient(i['recipe_id'],nin_id, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit'], macros =macros, micros =micros)
+                    ingredient_list.append(ingredient_data)
+
+                db.session.add_all(ingredient_list)
+               
+                print('recipe %s created' % recipe['recipe_name'])
+                
+            except Exception as e:
+                print('exceptions', e)
+                db.session.rollback()  
+                return make_response({"success":False,"message":"invalid payload"}, 400)
+
+        db.session.flush()
+        db.session.commit()
+      
+        return make_response({"success":True,"message":"Recipe created successfully"}, 201)
+    except Exception as e:
+        print('in catch', e)   
+        db.session.rollback()
+        return make_response({"success":False,"message":"invalid payload","err":jsonify(str(e))}, 400)
+
+
+
+# TODO:
 # Implement create recipe
 @recipe_management_bp.route('/nin_recipe', methods=['POST'])
 def create_nin_recipe():
