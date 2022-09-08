@@ -12,7 +12,7 @@ from schemas.timing_schema import TimingSchema
 
 from models.plan_model import Plan
 from schemas.plan_schema import PlanSchema
-
+from sqlalchemy import func
 
 
 
@@ -360,6 +360,66 @@ def create_meal_plan():
         a = Planned_Meal(recipe_id,schedule_id,serving_unit_id,quantity)
         db.session.add(a)
         # db.session.execute(Planned_Meal.insert(),params={"recipe_id": recipe_id, "serving_unit_id": serving_unit_id, "schedule_id": schedule_id,"quantity":quantity},)         
+        db.session.commit()
+        return make_response({"success":"Meal planned successfully"}, 201)
+    except Exception as e:
+        return jsonify(str(e))
+
+# TODO:
+# Implement create a meal plan by name
+@plan_management_bp.route('/planMealByName', methods=['POST'])
+def create_meal_plan_by_name():
+    try:
+      
+        req_body = request.get_json()
+
+        recipe_name = req_body['recipe']
+        plan_name = req_body['plan']
+        day_name = req_body['day']
+        timing = req_body['time']
+        quantity = req_body['quantity']
+        serving_unit = req_body['serving_unit']
+
+        print('request', req_body)
+        plan_object = Plan.query.filter(func.lower(Plan.plan_name) == func.lower(plan_name)).first()
+        if plan_object == None:
+            return make_response({"success":False,"message":"Planed name not found"}, 404)
+
+        day_object = Day.query.filter(func.lower(Day.day) == func.lower(day_name)).first()
+        if day_object == None:
+            return make_response({"success":False,"message":"Day not found"}, 404)
+
+        timing_object = Timing.query.filter(func.lower(Timing.timing_label) == func.lower(timing)).first()
+        if timing_object == None:
+            return make_response({"success":False,"message":"Timing not found"}, 404)
+
+        serving = IngredientServingUnit.query.filter(func.lower(IngredientServingUnit.serving_unit_name) == func.lower(serving_unit)).first()
+        if timing_object == None:
+            return make_response({"success":False,"message":"Serving unit not found"}, 404)
+
+
+        recipe = Recipe.query.filter(func.lower(Recipe.recipe_name) == func.lower(recipe_name)).first()
+        if recipe == None:
+            return make_response({"success":False,"message":"recipe not found"}, 404)
+
+        print('planid', plan_object.id)
+        print('dayid', day_object.id)
+        print('timing', timing_object.id)
+        print('recipe', recipe.id)
+
+
+
+        plan_schedule = Plan_Schedule.query.filter(Plan_Schedule.day_id == day_object.id, Plan_Schedule.time_id == timing_object.id, Plan_Schedule.plan_id == plan_object.id).first()
+        if plan_schedule == None:
+            return make_response({"success":False,"message":"Planed schedule Id not found"}, 404)
+
+       
+        print('planed schedule', plan_schedule)
+        print('recipe', recipe)
+    
+       
+        a = Planned_Meal(recipe.id,plan_schedule.id,serving.id,quantity)
+        db.session.add(a)
         db.session.commit()
         return make_response({"success":"Meal planned successfully"}, 201)
     except Exception as e:
