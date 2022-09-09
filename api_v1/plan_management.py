@@ -14,7 +14,8 @@ from models.plan_model import Plan
 from schemas.plan_schema import PlanSchema
 from sqlalchemy import func
 
-
+from schemas.ingredient_schema import IngredientSchema
+from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
 
 
 from models.ingredient_serving_unit_model import IngredientServingUnit
@@ -49,6 +50,9 @@ plan_schema_list = PlanSchema(many = True)
 plan_meal_schema = PlannedMealSchema()
 plan_meal_schema_list = PlannedMealSchema(many = True)
 
+
+serving_unit_schema = IngredientServingUnitSchema()
+serving_unit_schema_list = IngredientServingUnitSchema(many = True)
 
 ######## PLAN TYPE #########
 
@@ -378,7 +382,7 @@ def create_meal_plan_by_name():
         day_name = req_body['day']
         timing = req_body['time']
         quantity = req_body['quantity']
-        serving_unit = req_body['serving_unit']
+        serving_unit_payload = req_body['serving_unit']
 
         print('request', req_body)
         plan_object = Plan.query.filter(func.lower(Plan.plan_name) == func.lower(plan_name)).first()
@@ -393,9 +397,24 @@ def create_meal_plan_by_name():
         if timing_object == None:
             return make_response({"success":False,"message":"Timing not found"}, 404)
 
-        serving = IngredientServingUnit.query.filter(func.lower(IngredientServingUnit.serving_unit_name) == func.lower(serving_unit)).first()
-        if serving == None:
+        serving_data = IngredientServingUnit.query.all()
+        serving_unit_list = serving_unit_schema_list.dump(serving_data)
+
+        matched_serving_unit = None
+        for serving_unit in serving_unit_list:
+            print('serving_unit', serving_unit)
+            if serving_unit_payload == serving_unit['serving_unit_name'].lower() or serving_unit_payload in serving_unit['serving_unit_othername']:
+                matched_serving_unit = serving_unit
+                print('serving_unit matched', serving_unit)
+                break
+        print('matched unit', matched_serving_unit)
+        
+        if matched_serving_unit == None:
             return make_response({"success":False,"message":"Serving unit not found"}, 404)
+
+        # serving = IngredientServingUnit.query.filter(func.lower(IngredientServingUnit.serving_unit_name) == func.lower(serving_unit)).first()
+        # if serving == None:
+           
 
 
         recipe = Recipe.query.filter(func.lower(Recipe.recipe_name) == func.lower(recipe_name)).first()
@@ -406,7 +425,7 @@ def create_meal_plan_by_name():
         print('dayid', day_object.id)
         print('timing', timing_object.id)
         print('recipe', recipe.id)
-        print('serving', serving)
+        print('serving', matched_serving_unit)
 
 
 
@@ -419,7 +438,7 @@ def create_meal_plan_by_name():
         print('recipe', recipe)
     
        
-        a = Planned_Meal(recipe.id,plan_schedule.id,serving.id,quantity)
+        a = Planned_Meal(recipe.id,plan_schedule.id,matched_serving_unit['id'],quantity)
         db.session.add(a)
         db.session.commit()
         return make_response({"success":"Meal planned successfully"}, 201)
