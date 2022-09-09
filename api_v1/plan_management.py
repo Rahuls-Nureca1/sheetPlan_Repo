@@ -394,7 +394,7 @@ def create_meal_plan_by_name():
             return make_response({"success":False,"message":"Timing not found"}, 404)
 
         serving = IngredientServingUnit.query.filter(func.lower(IngredientServingUnit.serving_unit_name) == func.lower(serving_unit)).first()
-        if timing_object == None:
+        if serving == None:
             return make_response({"success":False,"message":"Serving unit not found"}, 404)
 
 
@@ -406,6 +406,7 @@ def create_meal_plan_by_name():
         print('dayid', day_object.id)
         print('timing', timing_object.id)
         print('recipe', recipe.id)
+        print('serving', serving)
 
 
 
