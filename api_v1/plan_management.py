@@ -458,20 +458,17 @@ def delete_meal_plan():
         recipe_id = req_body['recipe_id']
         schedule_id = req_body['schedule_id']
 
-        plan_schedule = Plan_Schedule.query.filter_by(id = schedule_id).first()
-        if plan_schedule == None:
-            return make_response({"success":False,"message":"Planed schedule Id not found"}, 404)
+        planned_meal = Planned_Meal.query.filter(Planned_Meal.recipe_id == recipe_id, Planned_Meal.schedule_id == schedule_id).delete()
+        print('planned_meal', planned_meal)
+        if planned_meal == 0:
+            return make_response({"success":False,"message":"scheduled plan not found"}, 404)
 
-        recipe = Recipe.query.filter_by(id = recipe_id).first()
-        if recipe == None:
-            return make_response({"success":False,"message":"recipe Id not found"}, 404)
-
-        print('planed schedule', plan_schedule)
-        print('recipe', recipe)
-        plan_schedule.recipes.remove(recipe)
+       
         db.session.commit()
-        return make_response({"success":"Meal plan deleted successfully"}, 201)
+        return make_response({"success":False,"message":"planned meal delete successfully"}, 200)
+       
     except Exception as e:
+
         return jsonify(str(e))
 
 
