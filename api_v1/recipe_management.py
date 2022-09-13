@@ -14,6 +14,8 @@ from time import strftime
 from utils import api_logger, nin_mapping
 import os
 from models.plan_schedule_model import Planned_Meal
+from sqlalchemy import func
+
 dirname = os.path.dirname(__file__)
 
 recipe_management_bp = Blueprint('recipe_management', __name__)
@@ -39,6 +41,11 @@ def create_recipe():
         serving_unit_list = serving_unit_schema_list.dump(serving_data)
 
         req_body = request.get_json()
+
+        recipe = Recipe.query.filter(func.lower(Recipe.recipe_name) == func.lower(req_body['recipe_name'])).all()
+        if len(recipe) > 0:
+            return make_response({"success":False,"message":"Recipe already exist"}, 400)
+
         recipe_data = Recipe(req_body['recipe_name'],req_body['image_path'],req_body['course'],req_body['cusine'],req_body['recipe_url'],req_body['website_name'],req_body['serving'], 1)
         ingredients = req_body['ingredients']
         ingredient_list = []
@@ -137,6 +144,10 @@ def create_multiple_recipe():
         for recipe in req_body:
             ingredient_list = []    
             print('recipe %s started' % recipe['recipe_name'])
+            recipe_list = Recipe.query.filter(func.lower(Recipe.recipe_name) == func.lower(recipe['recipe_name'])).all()
+            
+            if len(recipe_list) > 0:
+                return make_response({"success":False,"message":"Recipe %s already exist" % recipe['recipe_name']}, 400)
             recipe_data = Recipe(recipe['recipe_name'],recipe['image_path'],recipe['course'],recipe['cusine'],recipe['recipe_url'],recipe['website_name'],recipe['serving'], 1)
             ingredients = recipe['ingredients']
             try:
@@ -228,7 +239,7 @@ def create_multiple_recipe():
 
 
 # TODO:
-# Implement create recipe
+# Implement create nin recipe
 @recipe_management_bp.route('/nin_recipe', methods=['POST'])
 def create_nin_recipe():
     try:
