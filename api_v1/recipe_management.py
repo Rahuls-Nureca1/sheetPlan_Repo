@@ -330,6 +330,29 @@ def create_nin_recipe():
         return jsonify(str(e))
 
 
+@recipe_management_bp.route('/recipe/<int:recipe_id>', methods=['GET'])
+def get_recipe(recipe_id):
+    """
+    Get recipe by id
+
+    URL Params 
+    - `recipe_id` (int): ID of the recipe
+
+    Returns
+    - `recipe`: Recipe object. See `~schemas.recipe_schema.RecipeSchema` for details.
+    """
+    try:
+        recipe = Recipe.query.filter(Recipe.id == recipe_id).first()
+
+        if recipe is None:
+            return make_response({"message":"Recipe not found"}, 404)
+
+        recipe_data = recipe_schema.dump(recipe)
+        return make_response({"recipe":recipe_data}, 200)
+    except Exception as e:
+        print('in catch', e)
+        return jsonify(str(e))
+
 
 # TODO:
 # Implement update recipe
