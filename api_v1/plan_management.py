@@ -475,7 +475,7 @@ def delete_meal_plan():
         return jsonify(str(e))
 
 
-
+# TODO: Update API url to /plan/<plan_id>/day/<day_id>
 # Implement get meal plan from plan id and day id
 @plan_management_bp.route('/<planId>/<dayId>', methods=['GET'])
 def list_meal_plan_schedule(planId, dayId):
@@ -506,12 +506,17 @@ def list_meal_plan_schedule(planId, dayId):
                 planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == recipe['id'], Planned_Meal.schedule_id == plan['id']).first()
 
                 meal_data = plan_meal_schema.dump(planned_meal_data)
-               
+
+                # Calculate nutrition as per quantity in planned meal
+                meal_servings_ratio = meal_data['quantity'] / recipe['serving']
+                for type in ['macros', 'micros']:
+                    for nutrient in recipe[type]:
+                        nutrient['value'] = round(nutrient['value'] * meal_servings_ratio, 2)
+
                 recipe['serving'] =  meal_data['serving']
                 recipe['serving']['quantity'] = meal_data['quantity']
 
             data[plan['timing']['timing_label']] = plan['recipes']
-            print('plan', plan)
 
         return jsonify(data)
 
