@@ -354,6 +354,32 @@ def get_recipe(recipe_id):
         return jsonify(str(e))
 
 
+@recipe_management_bp.route('/recipe/search', methods=['GET'])
+def search_recipe():
+    """
+    Search recipe by name
+
+    Query Params 
+    - `search_query`: Name of the recipe
+
+    Returns
+    - `recipe`: Recipe object. See `~schemas.recipe_schema.RecipeSchema` for details.
+    """
+    try:
+        search_query = request.args.get('search_query', None)
+
+        if search_query == None:
+            return make_response({"message":"search_query is required"}, 400)
+        
+        recipes = Recipe.query.filter(Recipe.deleted == False, Recipe.recipe_name.contains(search_query))
+
+        recipe_data = recipe_schema_list.dump(recipes)
+        return make_response({"recipes":recipe_data}, 200)
+    except Exception as e:
+        print('in catch', e)
+        return jsonify(str(e))
+
+
 # TODO:
 # Implement update recipe
 @recipe_management_bp.route('/<recipe_id>', methods=['PUT'])
