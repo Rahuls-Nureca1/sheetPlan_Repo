@@ -476,7 +476,6 @@ def delete_meal_plan():
 
 
 
-# TODO:
 # Implement get meal plan from plan id and day id
 @plan_management_bp.route('/<planId>/<dayId>', methods=['GET'])
 def list_meal_plan_schedule(planId, dayId):
@@ -491,7 +490,6 @@ def list_meal_plan_schedule(planId, dayId):
         if len(plan_data) == 0:
            return make_response({"success":False,"message":"Invalid plan id or day id"}, 200)
 
-        # print(plan_data)
         data = {}
         if len(plan_data):
              data["success"] = True
@@ -503,30 +501,17 @@ def list_meal_plan_schedule(planId, dayId):
 
         for plan in plan_data:
            
-            # plan['recipes']['macros'] = {}
-            # plan['recipes']['micros'] = {}
-            # print('plan recipes', plan['recipes'])
-            # for recipe in plan['recipes']:
-            for i in range(len(plan['recipes'])):
-                # print('test', plan['recipes'][i]['id'])
-                
-                planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == plan['recipes'][i]['id'], Planned_Meal.schedule_id == plan['id']).first()
-                # print('test meal data', planned_meal_data)
+            for recipe in plan['recipes']:
+
+                planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == recipe['id'], Planned_Meal.schedule_id == plan['id']).first()
 
                 meal_data = plan_meal_schema.dump(planned_meal_data)
-                # print('planned_meal_data',meal_data)
-                # plan['recipes'][i]['qty'] = meal_data['quantity']
                
-                plan['recipes'][i]['serving'] =  plan['servings']
-                plan['recipes'][i]['serving'][0]['quantity'] = meal_data['quantity']
-               
-                # recipe['serving'] = plan['servings'][index]
-                # print('planserving', plan['servings'][i])
+                recipe['serving'] =  meal_data['serving']
+                recipe['serving']['quantity'] = meal_data['quantity']
 
             data[plan['timing']['timing_label']] = plan['recipes']
             print('plan', plan)
-
-        # print("data",data)
 
         return jsonify(data)
 
