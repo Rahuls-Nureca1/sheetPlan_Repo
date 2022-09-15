@@ -504,19 +504,10 @@ def list_meal_plan_schedule(planId, dayId):
         for plan in plan_data:
            
             for recipe in plan['recipes']:
-
                 planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == recipe['id'], Planned_Meal.schedule_id == plan['id']).first()
-
                 meal_data = plan_meal_schema.dump(planned_meal_data)
 
-                # Calculate nutrition as per quantity in planned meal
-                meal_servings_ratio = meal_data['quantity'] / recipe['serving']
-                for type in ['macros', 'micros']:
-                    for nutrient in recipe[type]:
-                        nutrient['value'] = round(nutrient['value'] * meal_servings_ratio, 2)
-
-                recipe['serving'] =  meal_data['serving']
-                recipe['serving']['quantity'] = meal_data['quantity']
+                recipe = process_planned_meal_recipe(recipe, meal_data)
 
             data[plan['timing']['timing_label']] = plan['recipes']
 
