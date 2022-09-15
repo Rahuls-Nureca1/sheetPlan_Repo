@@ -371,7 +371,7 @@ def search_recipe():
         if search_query == None:
             return make_response({"message":"search_query is required"}, 400)
         
-        recipes = Recipe.query.filter(Recipe.deleted == False, Recipe.recipe_name.contains(search_query))
+        recipes = Recipe.query.filter(Recipe.deleted == False, Recipe.recipe_name.ilike(f'%{search_query}%'))
 
         recipe_data = recipe_schema_list.dump(recipes)
         return make_response({"recipes":recipe_data}, 200)
