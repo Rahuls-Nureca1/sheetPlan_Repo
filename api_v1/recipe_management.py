@@ -569,7 +569,7 @@ def add_recipe_ingredient(recipe_id):
         return make_response({"success":False,"message":err.messages}, 403)
 
     except Exception as e:
-        return make_response({"success":False,"message":"ingredient addded successfully"}, 403)
+        return make_response({"success":False,"message":"ingredient creation failed"}, 403)
         
 
 
