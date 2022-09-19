@@ -1,4 +1,5 @@
 from cmath import log
+from distutils.log import error
 import json
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -7,7 +8,7 @@ from models.plan_schedule_model import Recipe
 from models.ingredient_serving_unit_model import IngredientServingUnit
 from models.ingredient_model import Ingredient
 from schemas.nin_ingredient_schema import NININgredientSchema
-from schemas.recipe_schema import RecipeSchema
+from schemas.recipe_schema import RecipeSchema, CreateIngredientSchema
 from schemas.ingredient_schema import IngredientSchema
 from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
 from time import strftime
@@ -15,6 +16,8 @@ from utils import api_logger, nin_mapping
 import os
 from models.plan_schedule_model import Planned_Meal
 from sqlalchemy import func
+from marshmallow import ValidationError
+
 
 dirname = os.path.dirname(__file__)
 
@@ -22,6 +25,11 @@ recipe_management_bp = Blueprint('recipe_management', __name__)
 
 recipe_schema = RecipeSchema()
 recipe_schema_list = RecipeSchema(many = True)
+
+
+recipe_create_ingredient_schema = CreateIngredientSchema()
+
+
 
 serving_unit_schema = IngredientServingUnitSchema()
 serving_unit_schema_list = IngredientServingUnitSchema(many = True)
@@ -407,8 +415,6 @@ def delete_recipe(id):
         return jsonify(str(e))
 
 
-
-
 # TODO:
 # Implement add recipe Ingredient
 @recipe_management_bp.route('/<recipe_id>/ingredient', methods=['POST'])
@@ -417,8 +423,25 @@ def add_recipe_ingredient(recipe_id):
         serving_data = IngredientServingUnit.query.all()
         serving_unit_list = serving_unit_schema_list.dump(serving_data)
         ingredients = request.get_json()
+       
+        for ingredient_object in ingredients:
+            print('ingredient obj', ingredient_object)
+            errors = recipe_create_ingredient_schema.load(ingredient_object)
+            print('errors', errors)
+            # if errors :
+            #     print(errors)
+            #     return make_response({"success":False,"message1":errors}, 403)
+            # else:
+            #     print('in else')
+
+        
+
+
         try:
+            
+           
             recipe_data = Recipe.query.filter_by(id = recipe_id).first()
+
             for i in ingredients:
                 # i['recipe_id'] = recipe_data.id
                 i['created_by'] = 1
@@ -484,14 +507,21 @@ def add_recipe_ingredient(recipe_id):
             db.session.commit()
         except Exception as e:
             print('exceptions', e)
-            db.session.rollback()    
+            db.session.rollback()  
+            return jsonify(errors), 500
+
         
-        db.session.commit()
-      
         
         return make_response({"success":True,"message":"ingredient addded successfully"}, 200)
+
+    except ValidationError as err:
+        print(err.messages)  # => {"email": ['"foo" is not a valid email address.']}
+        print(err.valid_data)  # => {"name": "John"}
+        return make_response({"success":False,"message":err.messages}, 403)
+
     except Exception as e:
-        print('exception', e)
+        return make_response({"success":False,"message":"ingredient addded successfully"}, 403)
+        
 
 
 # TODO:
