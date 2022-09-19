@@ -1,10 +1,13 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields,  validates, ValidationError
 import datetime
 from models.plan_schedule_model import Planned_Meal
 from schemas.ingredient_schema import IngredientSchema
 import collections
 import functools
 import operator
+
+
+
 
 class CourseSchema(Schema):
     type = fields.String()
@@ -96,4 +99,12 @@ class RecipeSchema(Schema):
    
 
 
-        
+
+class CreateIngredientSchema(Schema):
+    ingredient_name = fields.Str(required=True, allow_none=False)
+    ingredient_standard_name = fields.Str(required=True,allow_none=False)
+    ingredient_desc = fields.Str(required=True,allow_none=False)
+    quantity = fields.Int(required=True,allow_none=False)
+    quantity_in_gram = fields.Str(required=True,allow_none=True)
+    serving_unit = fields.Str(required=True,allow_none=False)
+    nin_id = fields.Int(required=True,allow_none=True)
