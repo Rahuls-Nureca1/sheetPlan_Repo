@@ -93,7 +93,7 @@ class RecipeSchema(Schema):
             if i.quantity_in_gram != None:
                 per_serving += i.quantity_in_gram
           
-       
+        per_serving = per_serving / obj.serving
 
         return per_serving
    

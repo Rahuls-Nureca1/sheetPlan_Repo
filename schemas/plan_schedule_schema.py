@@ -8,6 +8,7 @@ from schemas.timing_schema import TimingSchema
 from schemas.ingredient_serving_unit_schema import ServingUnitSchema
 
 class PlannedMealSchema(Schema):
+    serving = fields.Nested(ServingUnitSchema, many=False)
     quantity = fields.Int()
     # class Meta:
     #     model = Planned_Meal
