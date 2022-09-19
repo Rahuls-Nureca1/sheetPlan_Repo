@@ -1,4 +1,5 @@
 from cmath import log
+import json
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
 from models.plan_schedule_model import Plan_Schedule, Planned_Meal
@@ -26,6 +27,7 @@ from schemas.recipe_schema import RecipeSchema
 
 from time import strftime
 from utils import api_logger
+from utils.planned_meal_utils import process_planned_meal_recipe
 
 
 
@@ -502,19 +504,10 @@ def list_meal_plan_schedule(planId, dayId):
         for plan in plan_data:
            
             for recipe in plan['recipes']:
-
                 planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == recipe['id'], Planned_Meal.schedule_id == plan['id']).first()
-
                 meal_data = plan_meal_schema.dump(planned_meal_data)
 
-                # Calculate nutrition as per quantity in planned meal
-                meal_servings_ratio = meal_data['quantity'] / recipe['serving']
-                for type in ['macros', 'micros']:
-                    for nutrient in recipe[type]:
-                        nutrient['value'] = round(nutrient['value'] * meal_servings_ratio, 2)
-
-                recipe['serving'] =  meal_data['serving']
-                recipe['serving']['quantity'] = meal_data['quantity']
+                recipe = process_planned_meal_recipe(recipe, meal_data)
 
             data[plan['timing']['timing_label']] = plan['recipes']
 
@@ -524,6 +517,74 @@ def list_meal_plan_schedule(planId, dayId):
     except Exception as e:
         print('exception', e)
 
+
+@plan_management_bp.route('/plan/search', methods=['GET'])
+def search_plan_schedule():
+    """
+    Search plan schedule by plan name and day
+
+    Query Parameters:
+    - `plan_name`: Plan name to search
+    - `day`: Day to search
+
+    Returns:
+    - `plans`: List of 
+    """
+    try:
+        plan_name = request.args.get('plan_name', None)
+        day = request.args.get('day', None)
+
+        if plan_name == None or day == None:
+            return make_response({"success":False,"message":"Plan name and day is required"}, 400)
+
+        # Get plan ids for the given plan name
+        plans_data = Plan.query.filter(Plan.plan_name.ilike(f'%{plan_name}%')).all()
+        plan_ids = [plan.id for plan in plans_data]
+
+        # Get day id for the given day name
+        day = Day.query.filter(Day.day.ilike(f'%{day}%')).first()
+        if day == None:
+            return make_response({"success":False,"message":"Day not found"}, 404)
+        
+        # Get plan schedules for the given plan ids and day id
+        plan_schedule_data = Plan_Schedule.query.filter(Plan_Schedule.plan_id.in_(plan_ids), Plan_Schedule.day_id == day.id).all()
+        plan_data = plan_schedule_schema_list.dump(plan_schedule_data)
+
+        # Group plan data
+        plans = {}
+        # Construct recipe data for each plan_schedule
+        for plan in plan_data:
+            plan_name = plan['plan']['plan_name']
+
+            # Add plan name to response data if not already present
+            if plan_name not in plans.keys():
+                plans[plan_name] = {
+                    'plan_id': plan['plan']['id'],
+                    'plan_name': plan_name,
+                    'day': day.day,
+                    'day_id': day.id,
+                }
+
+            # Construct recipe data for each recipe in the plan
+            for recipe in plan['recipes']:
+                planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == recipe['id'], Planned_Meal.schedule_id == plan['id']).first()
+                meal_data = plan_meal_schema.dump(planned_meal_data)
+
+                recipe = process_planned_meal_recipe(recipe, meal_data)
+
+            plans[plan_name][plan['timing']['timing_label']] = plan['recipes']
+           
+        # Response data
+        response_data = {
+            "success": True,
+            "plans": plans
+        }
+
+        return make_response(response_data, 200)
+
+    except Exception as e:
+        print('exception', e)
+        make_response({"success":False,"message":"Something went wrong"}, 500)
 
 
 
