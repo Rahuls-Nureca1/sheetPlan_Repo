@@ -589,6 +589,11 @@ def update_recipe_ingredient(recipe_id,ingredient_id):
     - `serving_unit_id` (int): Ingredient serving unit id
 
     Returns:
+    - `success` (boolean): True if the ingredient is updated successfully
+    - `message` (string): Message for the update status
+    - `errors` (list): List of errors if any
+
+    Response Codes:
     - `200` on success
     - `404` if ingredient not found
     - `500` on internal server error
