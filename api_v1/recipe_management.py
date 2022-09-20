@@ -455,11 +455,14 @@ def delete_recipe(id):
         recipe = Recipe.query.filter(Recipe.id == id).update({Recipe.deleted : True})
         if recipe == 0:
             return make_response({"success":False,"message":"Recipe Id not found"}, 404)
+        else:
+            Planned_Meal.query.filter(Planned_Meal.recipe_id == id).delete()
 
         db.session.commit()
         return make_response({"success":True,"message":"Recipe deleted successfully"}, 200)
 
     except Exception as e:
+        db.session.rollback()
         print('exception', e)
         return jsonify(str(e))
 
