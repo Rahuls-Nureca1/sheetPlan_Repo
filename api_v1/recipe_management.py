@@ -1,5 +1,3 @@
-from cmath import log
-from distutils.log import error
 import json
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
@@ -11,7 +9,6 @@ from schemas.nin_ingredient_schema import NININgredientSchema
 from schemas.recipe_schema import RecipeSchema, CreateIngredientSchema
 from schemas.ingredient_schema import IngredientSchema
 from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
-from time import strftime
 from utils import api_logger, nin_mapping
 import os
 from models.plan_schedule_model import Planned_Meal
@@ -576,89 +573,78 @@ def add_recipe_ingredient(recipe_id):
         
 
 
-# TODO:
-# Implement update recipe Ingredient
-@recipe_management_bp.route('/ingredient/<ingrdient_id>', methods=['POST'])
-def update_recipe_ingredient(ingredient_id):
+@recipe_management_bp.route('/recipe/<recipe_id>/ingredient/<ingredient_id>', methods=['POST'])
+def update_recipe_ingredient(recipe_id,ingredient_id):
+    """
+    Update recipe ingredient
+    Allows to update the ingredient name, description, quantity, serving unit
+
+    Body:
+    - `ingredient_name` (string): Ingredient name
+    - `ingredient_standard_name` (string): Ingredient standard name
+    - `ingredient_desc` (string): Ingredient description
+    - `quantity` (float): Ingredient quantity
+    - `quantity_in_gram` (float): Ingredient quantity in gram
+    - `serving_unit` (string): Ingredient serving unit
+    - `serving_unit_id` (int): Ingredient serving unit id
+
+    Returns:
+    - `200` on success
+    - `404` if ingredient not found
+    - `500` on internal server error
+    """
     try:
-        serving_data = IngredientServingUnit.query.all()
-        serving_unit_list = serving_unit_schema_list.dump(serving_data)
-        ingredients = request.get_json()
-        try:
-            recipe_data = Recipe.query.filter_by(id = recipe_id).first()
-            for i in ingredients:
-                # i['recipe_id'] = recipe_data.id
-                i['created_by'] = 1
+        data = request.get_json()
+        new_ingredient_data = ingredient_schema.dump(data)
 
-                # find serving_unit_id and calculate quantity_in_gram from ingredient_serving_unit table
-                ingredient_serving_unit = i['serving_unit'].lower()
-                matched_serving_unit = None
-                serving_unit_id = None
-                serving_size = 0
+        ingredient_obj = Ingredient.query.filter_by(id=ingredient_id, recipe_id=recipe_id).first()
+        ingredient_data = ingredient_schema.dump(ingredient_obj)
 
-                for serving_unit in serving_unit_list:
-                    if ingredient_serving_unit == serving_unit['serving_unit_name'].lower() or ingredient_serving_unit in serving_unit['serving_unit_othername']:
-                        matched_serving_unit = serving_unit
-                        break
-                if matched_serving_unit != None:
-                    serving_unit_id = matched_serving_unit['id']
-                    serving_size = matched_serving_unit['serving_unit_quantity']
-                quantity_in_gram = i['quantity_in_gram'] if i['quantity_in_gram'] != None else serving_size * i['quantity']
-                
+        if not ingredient_data:
+            return make_response({"success":False,"message":"ingredient not found"}, 404)
 
-                #find maping from nin table if nin_id is passed in payload
-                if i['nin_id'] == None or i['nin_id'] == 0:
+        # Get Mapped NIN
+        nin_ingredient = NIN_Ingredient.query.filter_by(id=ingredient_data['nin_id']).first()
+        nin_ingredient_data = nin_ingredient_schema.dump(nin_ingredient)
 
-                    suggested_nin_list = nin_mapping.map_ingredient(i['ingredient_standard_name'])
-                    nin_id = suggested_nin_list[0]['id'] if len(suggested_nin_list) else None
-                else:
-                    nin_id = i['nin_id']
-                    data = NIN_Ingredient.query.filter(NIN_Ingredient.id == nin_id).all()
-                    if len(data) == 0:
-                        suggested_nin_list =  []
-                    suggested_nin_list = nin_ingredient_schema_list.dump(data)
+        #  Calculate new macros and micros
+        macros = nin_ingredient_data['macros']
+        micros = nin_ingredient_data['micros']
+        multiplication_factor = new_ingredient_data['quantity_in_gram'] / 100
+        for key in macros:
+            macros[key] = round(float(macros[key]) * multiplication_factor,3)
+        for key in micros:
+            micros[key] = round(float(micros[key]) * multiplication_factor,3)
 
+        # Update ingredient
+        updated_ingredient = Ingredient.query.filter_by(id=ingredient_id).update(
+            {
+                'ingredient_name': new_ingredient_data['ingredient_name'],
+                'ingredient_standard_name': new_ingredient_data['ingredient_standard_name'],
+                'ingredient_desc': new_ingredient_data['ingredient_desc'],
+                'quantity': new_ingredient_data['quantity'],
+                'quantity_in_gram': new_ingredient_data['quantity_in_gram'],
+                'serving_unit_id': new_ingredient_data['serving_unit_id'],
+                'serving_unit': new_ingredient_data['serving_unit'],
+                'macros': macros,
+                'micros': micros,
+            }
+        )
 
-            
-
-                # map ingredient with NIN table based on standardname
-                if len(suggested_nin_list):
-                    # if there is more than one match take the best match
-                    macros = suggested_nin_list[0]['macros']
-                    micros = suggested_nin_list[0]['micros']
-                    multiplication_factor = quantity_in_gram/100
-                    for key in macros:
-                        macros[key] = round(float(macros[key]) * multiplication_factor,2)
-                    for key in micros:
-                        micros[key] = round(float(micros[key]) * multiplication_factor,3)
-                        
-                    
-                    # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,macros,micros)
-                else:
-                    # if there is no match found insert default data with 0 value
-                    filename = os.path.join(dirname, '../seeds/data/nutrition_blueprint.json')
-                    with open(filename) as file:
-                            data = json.load(file)
-                            macros = data['macros']
-                            micros = data['micros']
-                            # ingredient_nutrition_data =  IngredientNutrition(ingredient_data.id,data['macros'],data['micros'])
-
-                ingredient_data = Ingredient(recipe = recipe_data, nin_id = nin_id,ingredient_name=i['ingredient_name'],ingredient_standard_name=i['ingredient_standard_name'],ingredient_desc= i['ingredient_desc'],quantity= i['quantity'],quantity_in_gram=  quantity_in_gram,serving_unit_id = serving_unit_id,serving_unit = i['serving_unit'], macros =macros, micros =micros)
-
-                db.session.add(ingredient_data)
-                db.session.flush()
-
+        if updated_ingredient:
             db.session.commit()
-        except Exception as e:
-            print('exceptions', e)
-            db.session.rollback()    
-        
-        db.session.commit()
-      
-        
-        return make_response({"success":True,"message":"ingredient addded successfully"}, 200)
+            return make_response({"success":True,"message":"ingredient updated successfully"}, 200)
+        else:
+            return make_response({"success":False,"message":"ingredient update failed"}, 500)
+
+    except ValidationError as err:
+        print(err.messages)
+        print(err.valid_data)
+        return make_response({"success":False,"error":err.messages, "message": "Invalid or missing parameters"}, 400)
+
     except Exception as e:
         print('exception', e)
+        db.session.rollback()
 
 
 # TODO:
