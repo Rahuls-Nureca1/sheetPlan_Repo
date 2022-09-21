@@ -102,10 +102,15 @@ def create_recipe():
                     # if there is more than one match take the best match
                     macros = suggested_nin_list[0]['macros']
                     micros = suggested_nin_list[0]['micros']
+
                     multiplication_factor = quantity_in_gram/100
                     for key in macros:
+                        if macros[key] == '':
+                            macros[key] = 0
                         macros[key] = round(float(macros[key]) * multiplication_factor, 2)
                     for key in micros:
+                        if micros[key] == '':
+                            micros[key] = 0
                         micros[key] =  round(float(micros[key]) * multiplication_factor,3)
                         
                     
