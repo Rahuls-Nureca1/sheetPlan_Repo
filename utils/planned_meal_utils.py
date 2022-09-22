@@ -1,5 +1,6 @@
 
 from models.plan_schedule_model import Planned_Meal
+from schemas.plan_schedule_schema import PlannedMealSchema
 
 
 def process_planned_meal_recipe(recipe, planned_meal):
@@ -26,3 +27,25 @@ def process_planned_meal_recipe(recipe, planned_meal):
     recipe['serving'] = planned_meal['serving']
     recipe['serving']['quantity'] = planned_meal['quantity']
     return recipe
+
+
+def get_planned_meal_serving_details(recipe_id, schedule_id):
+    """
+    This function is used to get the planned meal quantity
+
+    Params
+    - `recipe_id` - Recipe ID
+    - `schedule_id` - Schedule ID
+
+    Returns
+    - `servings` - Planned meal quantity
+    """
+    planned_meal_data = Planned_Meal.query.filter_by(recipe_id=recipe_id, schedule_id=schedule_id).first()
+    meal_data = PlannedMealSchema().dump(planned_meal_data)
+
+    response = {
+        **meal_data['serving'],
+        'quantity': meal_data['quantity']
+    }
+
+    return response

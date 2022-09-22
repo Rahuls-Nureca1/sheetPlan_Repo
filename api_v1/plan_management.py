@@ -27,7 +27,7 @@ from schemas.recipe_schema import RecipeSchema
 
 from time import strftime
 from utils import api_logger
-from utils.planned_meal_utils import process_planned_meal_recipe
+from utils.planned_meal_utils import get_planned_meal_serving_details, process_planned_meal_recipe
 
 
 
@@ -587,7 +587,71 @@ def search_plan_schedule():
         make_response({"success":False,"message":"Something went wrong"}, 500)
 
 
+@plan_management_bp.route('/plan/<plan_id>', methods=['GET'])
+def get_plan_details(plan_id):
+    """
+    Get plan details by plan id
+    
+    - `plan_id`: Plan id to search
 
+    Returns:
+    - `plan_details`: Plan details (Recipe list for each day)
+    """
+    try:
+        # Check if plan exists
+        found_plan = Plan.query.get(plan_id)
+        if found_plan == None:
+            return make_response({"success":False,"message":"Plan not found"}, 404)
+
+        #  Get plan schedules for the given plan id
+        plan_schedules = Plan_Schedule.query.filter_by(plan_id = plan_id).all()
+        plans_data = plan_schedule_schema_list.dump(plan_schedules)
+
+        # Construct plan details
+        plan_details = {}
+        for plan in plans_data:
+
+            # Skip if there are no recipes for the plan
+            if len(plan['recipes']) == 0:
+                continue
+
+            day = plan['day']
+            timing = plan['timing']
+
+            # Add day to plan details if not already present
+            if day['day'] not in plan_details.keys():
+                plan_details[day['day']] = {}
+            
+            # Format recipe data
+            recipes = []
+            for recipe in plan['recipes']:
+                recipe_data = {
+                    "recipe_id": recipe['id'],
+                    "recipe_name": recipe['recipe_name'],
+                    "serving": get_planned_meal_serving_details(recipe['id'], plan['id'])
+                }
+                recipes.append(recipe_data)
+
+            # Add details for each timing
+            plan_details[day['day']][timing['timing_label']] = {
+                "schedule_id": plan['id'],
+                "total_recipes": len(recipes),
+                "recipes": recipes
+            }
+
+        # Response data
+        response_data = {
+            "success": True,
+            "plan_id": plan_id,
+            "plan_name": found_plan.plan_name,
+            "plan_details": plan_details
+        }
+
+        return make_response(response_data, 200)
+
+    except Exception as e:
+        print('exception', e)
+        make_response({"success":False, "message":"Something went wrong"}, 500)
 
 
 # TODO:
