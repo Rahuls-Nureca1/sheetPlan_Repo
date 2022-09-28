@@ -1,12 +1,12 @@
 {
-    "macros":{
+    "macros": {
         "protein": 0,
         "total fat": 0,
         "fiber": 0,
         "carbs": 0,
         "energy": 0
     },
-    "micros":{
+    "micros": {
         "calcium": 0,
         "iron": 0,
         "manganese": 0,
