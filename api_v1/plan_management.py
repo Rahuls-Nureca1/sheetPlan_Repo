@@ -486,7 +486,6 @@ def delete_meal_plan():
 @plan_management_bp.route('/<planId>/<dayId>', methods=['GET'])
 def list_meal_plan_schedule(planId, dayId):
     try:
-        # import ipdb;ipdb.set_trace()
         t1 = time.time()
 
         plan_schedule_data = Plan_Schedule.query.filter_by(plan_id = planId, day_id = dayId).all()
@@ -583,7 +582,7 @@ def list_meal_plan_schedule_new(planId, dayId):
                 print('\t plan meal dump ', round(t7 - t6, 3))
                 details.append(process_planned_meal_recipe(recipe, meal_data))
 
-            print('scedule ', plan.timing.timing_label)
+            print('schedule ', plan.timing.timing_label)
             data[plan.timing.timing_label] = details
         t8 = time.time()
         print('Time Processing : ', round(t8 - t1, 3))
