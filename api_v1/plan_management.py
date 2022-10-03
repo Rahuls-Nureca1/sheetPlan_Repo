@@ -1,3 +1,4 @@
+import time
 from cmath import log
 import json
 from flask import Blueprint, request, jsonify, make_response
@@ -55,6 +56,9 @@ plan_meal_schema_list = PlannedMealSchema(many = True)
 
 serving_unit_schema = IngredientServingUnitSchema()
 serving_unit_schema_list = IngredientServingUnitSchema(many = True)
+
+recipe_schema = RecipeSchema()
+recipe_schema_list = RecipeSchema(many = True)
 
 ######## PLAN TYPE #########
 
@@ -482,13 +486,18 @@ def delete_meal_plan():
 @plan_management_bp.route('/<planId>/<dayId>', methods=['GET'])
 def list_meal_plan_schedule(planId, dayId):
     try:
-        
+        # import ipdb;ipdb.set_trace()
+        t1 = time.time()
+
         plan_schedule_data = Plan_Schedule.query.filter_by(plan_id = planId, day_id = dayId).all()
         print('plan_schedule_data', len(plan_schedule_data[0].recipes))
 
-       
+        t2 = time.time()
+        print('Schedule Query Time : ', round(t2 - t1, 3))
         plan_data = plan_schedule_schema_list.dump(plan_schedule_data)
-      
+
+        t3 = time.time()
+        print('Schedule Query Dump Time : ', round(t3 - t2, 3))
         if len(plan_data) == 0:
            return make_response({"success":False,"message":"Invalid plan id or day id"}, 200)
 
@@ -504,16 +513,82 @@ def list_meal_plan_schedule(planId, dayId):
         for plan in plan_data:
            
             for recipe in plan['recipes']:
+                print('recipe_id', recipe['id'])
+                t4 = time.time()
                 planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == recipe['id'], Planned_Meal.schedule_id == plan['id']).first()
+                t5 = time.time()
                 meal_data = plan_meal_schema.dump(planned_meal_data)
+                t6 = time.time()
 
                 recipe = process_planned_meal_recipe(recipe, meal_data)
 
             data[plan['timing']['timing_label']] = plan['recipes']
-
+        t8 = time.time()
+        print('Time Processing : ', round(t8-t1, 3))
         return jsonify(data)
 
       
+    except Exception as e:
+        print('exception', e)
+
+
+# TODO: Update API url to /plan/<plan_id>/day/<day_id>/new
+# Implement get meal plan from plan id and day id
+@plan_management_bp.route('/<planId>/<dayId>/new', methods=['GET'])
+def list_meal_plan_schedule_new(planId, dayId):
+    try:
+
+        t1 = time.time()
+
+        plan_schedule_data = Plan_Schedule.query.filter_by(plan_id=planId, day_id=dayId).all()
+        print('plan_schedule_data', len(plan_schedule_data[0].recipes))
+
+        t2 = time.time()
+        print('Schedule Query Time : ', round(t2 - t1, 3))
+
+        if len(plan_schedule_data) == 0:
+            return make_response({"success": False, "message": "Invalid plan id or day id"}, 200)
+
+        data = {}
+        if len(plan_schedule_data):
+            data["success"] = True
+            # data["Id"] = plan_schedule_data[0]['plan']['id']
+            data["Id"] = planId
+            data["plan_id"] = planId
+            data["plan_name"] = plan_schedule_data[0].plan.plan_name
+            data["day"] = dayId
+            data["day_name"] = plan_schedule_data[0].day.day
+
+        for plan in plan_schedule_data:
+            details = []
+            t3 = time.time()
+            recipe_objs = recipe_schema_list.dump(plan.recipes)
+            t4 = time.time()
+
+            print('Dump Time : ', round(t4 - t3, 3))
+
+            for recipe in recipe_objs:
+                print('recipe_id', recipe['id'])
+                t5 = time.time()
+                planned_meal_data = Planned_Meal.query.filter(Planned_Meal.recipe_id == recipe['id'],
+                                                              Planned_Meal.schedule_id == plan.id).first()
+                t6 = time.time()
+                print('\t plan meal query ',  round(t6 - t5, 3))
+                meal_data = {'quantity': planned_meal_data.quantity,
+                             'serving':  {'unit': planned_meal_data.serving.serving_unit_name,
+                                          'size': planned_meal_data.serving.serving_unit_quantity}}
+                print(meal_data)
+                # meal_data = plan_meal_schema.dump(planned_meal_data)
+                t7 = time.time()
+                print('\t plan meal dump ', round(t7 - t6, 3))
+                details.append(process_planned_meal_recipe(recipe, meal_data))
+
+            print('scedule ', plan.timing.timing_label)
+            data[plan.timing.timing_label] = details
+        t8 = time.time()
+        print('Time Processing : ', round(t8 - t1, 3))
+        return jsonify(data)
+
     except Exception as e:
         print('exception', e)
 
