@@ -1,29 +1,27 @@
 # Food DB APIs
 
-
-
 ## Getting started
 
 Flask API for meal management and recipe management.
 
 ---
-#### The main components of Food DB tech stack are:
-
-  - **Flask** flask api and store data in Postgres.
-  - **SQL Alchemy** - Python SQL toolkit and Object Relational Mapper
-  - **PostgreSQL** - database for food db
+The main components of Food DB tech stack are:
+- **Flask** flask api and store data in Postgres.
+- **SQL Alchemy** - Python SQL toolkit and Object Relational Mapper
+- **PostgreSQL** - database for food db
 
 ---
 
 ### Tools
 
 - Flask - https://flask.palletsprojects.com/en/1.1.x/
- - Postgres - https://www.postgresql.org/
+- Postgres - https://www.postgresql.org/
 ---  
 
-#### Database Architecture
+### Database Architecture
 ![Architecture](FoodDB_db_schema_v1.0.drawio.png)
 Edit diagram here: https://drive.google.com/file/d/1caNbffsqkHGGq422AAh7hidWJUZFdmVT/view?usp=sharing
+
 ---
 
 ### Directory Structure
@@ -48,7 +46,7 @@ Edit diagram here: https://drive.google.com/file/d/1caNbffsqkHGGq422AAh7hidWJUZF
 https://documenter.getpostman.com/view/21571234/VUxRNRT7#f89842db-0f27-4cf6-8a0d-39dbfe914204
 
 
-### Installation
+## Installation
 
 Food DB API  requires [Python](https://www.python.org/downloads/release/python-380/) 3.8 to run.
 
@@ -56,7 +54,7 @@ Installation has 2 main parts.
 -  Setting up docker for **Postgres** (optional if you want postgress locally or you can setup postgres without docker)
 - Configuring the **Environment**
 
-#### Docker-Postgres
+### Docker-Postgres
 * install postgres
     ```sh
     $ docker run \
@@ -82,7 +80,7 @@ Installation has 2 main parts.
     $ docker start postgres-db
     ```
 
-####  configuring the Environment
+###  Configuring the Environment
 * Create and switch virtual env using following commands(install miniconda if not installed from https://conda.io/projects/conda/en/latest/user-guide/install/index.html).
 
     ```sh
@@ -93,7 +91,11 @@ Installation has 2 main parts.
     ```sh
     $ pip install -r requirements.txt
     ```
-* Set environment variables in .envfile
+* Set environment variables in `.env` file.
+    ```sh
+    $ cp env.example .env
+    ```
+    Fill in the required values in `.env` file.
 * Create database using migration
     * init migration
         ```sh
@@ -131,8 +133,12 @@ To deploy API on fresh server install docker on server clone git repo and run fo
 
 ```sh
 $ docker compose build
-$ docker compose up -d 
+$ docker compose up -d
 ```
 for current dev server jenkins CI/CD pipeline is already setup.
 merging any branch to dev branch will deploy changes to the server
  
+ The repo files would be located in the following directory on the server:
+ ```sh
+ /var/lib/jenkins/workspace/fooddb-be
+```
