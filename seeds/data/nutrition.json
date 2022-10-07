@@ -21247,7 +21247,7 @@
     "macros": {
       "protein": "1",
       "total fat": "0.5",
-      "fiber": "",
+      "fiber": "0",
       "carbs": "12",
       "energy": "60"
     },
@@ -21347,7 +21347,7 @@
       "phosphorus": "0",
       "sodium": "875",
       "zinc": "0",
-      "fructose": "",
+      "fructose": "0",
       "glucose": "0",
       "sucrose": "0",
       "starch": "0",
