@@ -21665,5 +21665,192 @@
     "name": [
       "vermicelli"
     ]
+  },
+  {
+    "nin_code": "CNSOY001",
+    "ingredient_name": "Soy Chunks",
+    "ingredient_description": [
+      "soya chunks"
+    ],
+    "macros": {
+      "protein": 52,
+      "total fat": 0.5,
+      "fiber": 13,
+      "carbs": 33,
+      "energy": 345
+    },
+    "micros": {
+      "calcium": 0,
+      "iron": 0,
+      "manganese": 0,
+      "potassium": 0,
+      "phosphorus": 0,
+      "sodium": 0,
+      "zinc": 0,
+      "fructose": 0,
+      "glucose": 0,
+      "sucrose": 0,
+      "starch": 0,
+      "magnesium": 0,
+      "cholestrol": 0,
+      "water": 0,
+      "folic acid": 0
+    }
+  },
+  {
+    "nin_code": "CNCHI001",
+    "ingredient_name": "Chia Seeds",
+    "ingredient_description": [
+      "chia seeds"
+    ],
+    "macros": {
+      "protein": 17,
+      "total fat": 31,
+      "fiber": 34,
+      "carbs": 42,
+      "energy": 486
+    },
+    "micros": {
+      "calcium": 0,
+      "iron": 0,
+      "manganese": 0,
+      "potassium": 0,
+      "phosphorus": 0,
+      "sodium": 0,
+      "zinc": 0,
+      "fructose": 0,
+      "glucose": 0,
+      "sucrose": 0,
+      "starch": 0,
+      "magnesium": 0,
+      "cholestrol": 0,
+      "water": 0,
+      "folic acid": 0
+    }
+  },
+  {
+    "nin_code": "CNPUF001",
+    "ingredient_name": "Puffed Rice",
+    "ingredient_description": [
+      "puffed rice",
+      "sukhe bhel"
+    ],
+    "macros": {
+      "protein": 6,
+      "total fat": 0.5,
+      "fiber": 1.7,
+      "carbs": 90,
+      "energy": 402
+    },
+    "micros": {
+      "calcium": 0,
+      "iron": 0,
+      "manganese": 0,
+      "potassium": 0,
+      "phosphorus": 0,
+      "sodium": 0,
+      "zinc": 0,
+      "fructose": 0,
+      "glucose": 0,
+      "sucrose": 0,
+      "starch": 0,
+      "magnesium": 0,
+      "cholestrol": 0,
+      "water": 0,
+      "folic acid": 0
+    }
+  },
+  {
+    "nin_code": "CNGWF001",
+    "ingredient_name": "Whole Grain Wheat Flakes",
+    "ingredient_description": [
+      "whole grain wheat flakes"
+    ],
+    "macros": {
+      "protein": 10,
+      "total fat": 1.6,
+      "fiber": 10,
+      "carbs": 83.3,
+      "energy": 400
+    },
+    "micros": {
+      "calcium": 0,
+      "iron": 0,
+      "manganese": 0,
+      "potassium": 0,
+      "phosphorus": 0,
+      "sodium": 0,
+      "zinc": 0,
+      "fructose": 0,
+      "glucose": 0,
+      "sucrose": 0,
+      "starch": 0,
+      "magnesium": 0,
+      "cholestrol": 0,
+      "water": 0,
+      "folic acid": 0
+    }
+  },
+  {
+    "nin_code": "CNBRC001",
+    "ingredient_name": "Boiled Rice",
+    "ingredient_description": [
+      "rice boiled"
+    ],
+    "macros": {
+      "protein": 2.7,
+      "total fat": 0.3,
+      "fiber": 0.4,
+      "carbs": 28,
+      "energy": 130
+    },
+    "micros": {
+      "calcium": 0,
+      "iron": 0,
+      "manganese": 0,
+      "potassium": 0,
+      "phosphorus": 0,
+      "sodium": 0,
+      "zinc": 0,
+      "fructose": 0,
+      "glucose": 0,
+      "sucrose": 0,
+      "starch": 0,
+      "magnesium": 0,
+      "cholestrol": 0,
+      "water": 0,
+      "folic acid": 0
+    }
+  },
+  {
+    "nin_code": "CNWWF001",
+    "ingredient_name": "Whole Wheat Flour",
+    "ingredient_description": [
+      "whole wheat flour"
+    ],
+    "macros": {
+      "protein": 13,
+      "total fat": 2.5,
+      "fiber": 11,
+      "carbs": 72,
+      "energy": 340
+    },
+    "micros": {
+      "calcium": 0,
+      "iron": 0,
+      "manganese": 0,
+      "potassium": 0,
+      "phosphorus": 0,
+      "sodium": 0,
+      "zinc": 0,
+      "fructose": 0,
+      "glucose": 0,
+      "sucrose": 0,
+      "starch": 0,
+      "magnesium": 0,
+      "cholestrol": 0,
+      "water": 0,
+      "folic acid": 0
+    }
   }
 ]
