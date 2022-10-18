@@ -25,8 +25,11 @@ def register_blueprints(app):
     app.register_blueprint(recipe_management_bp, url_prefix='/api/v1/recipe_management')
     app.register_blueprint(plan_management_bp, url_prefix='/api/v1/plan_management')
     app.register_blueprint(user_management_bp, url_prefix='/api/v1/user_management')
+    
+    from quality_check_api.plan_check_app import qc_plan_management_bp
 
-
+    app.register_blueprint(qc_plan_management_bp, url_prefix='/api/v1/quality_check/plan/', name='qc_api')
+ 
 
 def create_app(config_object):
     app = Flask(__name__.split(".")[0], instance_relative_config=True)
