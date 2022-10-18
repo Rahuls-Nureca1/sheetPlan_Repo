@@ -511,7 +511,6 @@ def list_meal_plan_schedule(planId, dayId):
 
         for plan in plan_data:
             
-            total_calories = 0
             for recipe in plan['recipes']:
                 print('recipe_id', recipe['id'])
                 t4 = time.time()
@@ -521,10 +520,8 @@ def list_meal_plan_schedule(planId, dayId):
                 t6 = time.time()
 
                 recipe = process_planned_meal_recipe(recipe, meal_data)
-                macros = recipe['macros']
-                total_calories+= [mac['value'] for mac in macros if mac['key']=='energy'][0]
 
-            data[plan['timing']['timing_label']] = {"total_calories": total_calories, "recipes": plan['recipes']}
+            data[plan['timing']['timing_label']] = plan['recipes']
             
         t8 = time.time()
         print('Time Processing : ', round(t8-t1, 3))
