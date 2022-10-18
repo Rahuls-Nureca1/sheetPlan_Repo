@@ -150,3 +150,8 @@ migrations
 
 #idea
 .idea
+
+#directories
+input/
+output/
+exp/
