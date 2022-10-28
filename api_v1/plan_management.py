@@ -520,7 +520,12 @@ def list_meal_plan_schedule(planId, dayId):
                 t6 = time.time()
 
                 recipe = process_planned_meal_recipe(recipe, meal_data)
-                recipe['serving']['size'] = recipe['per_serving']
+                recipe['per_serving_wt'] = recipe['per_serving']
+                del recipe['per_serving']
+                recipe['serving']['total_serving_wt'] = recipe['per_serving_wt']*recipe['serving']['quantity']
+                del recipe['serving']['size']
+
+
 
             data[plan['timing']['timing_label']] = plan['recipes']
         t8 = time.time()
