@@ -38,7 +38,7 @@ class RecipeSchema(Schema):
     ingredients = fields.Nested(IngredientSchema, many=True)
     macros = fields.Method("calculate_macros")
     micros= fields.Method("calculate_micros")
-    per_serving = fields.Method("calculate_per_serving")
+    per_serving_wt = fields.Method("calculate_per_serving")
     plan_Schedule = fields.Nested(Planned_Meal,many=True)
     def calculate_macros(self, obj):
         macros = []
