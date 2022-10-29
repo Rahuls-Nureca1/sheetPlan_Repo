@@ -17,7 +17,7 @@ class Planned_Meal(db.Model):
     plan_schedule = db.relationship('Plan_Schedule', backref = 'planned_meal')
     serving_unit_id = db.Column(db.Integer,db.ForeignKey("ingredient_serving_unit.id"))
     serving = db.relationship('IngredientServingUnit', backref = 'planned_meal')
-    quantity = db.Column(db.Integer)
+    quantity = db.Column(db.Float)
     
     def __init__(self, recipe_id, schedule_id,serving_unit_id, quantity ) -> None:
         self.recipe_id = recipe_id

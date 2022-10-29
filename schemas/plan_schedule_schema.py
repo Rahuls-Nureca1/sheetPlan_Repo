@@ -9,7 +9,7 @@ from schemas.ingredient_serving_unit_schema import ServingUnitSchema
 
 class PlannedMealSchema(Schema):
     serving = fields.Nested(ServingUnitSchema, many=False)
-    quantity = fields.Int()
+    quantity = fields.Float()
     # class Meta:
     #     model = Planned_Meal
     #     fields = [ 'quantity', 'recipe']
