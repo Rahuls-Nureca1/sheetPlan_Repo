@@ -1,0 +1,321 @@
+recipe_id,recipe_name,Serving Unit
+1,Almonds,pieces
+2,Walnut,pieces
+3,Strawberries,cup
+4,Soaked Almonds,pieces
+5,Small Tomato,whole
+6,Small banana,whole fruit
+7,Banana,whole fruit
+8,Small apple,whole fruit
+9,Apple,whole fruit
+10,Apple(medium size),whole fruit
+11,Sesame Seeds,tbsp
+12,Papaya,small bowl
+13,Pomegranate,small bowl
+14,Orange (medium size),whole fruit
+15,Orange,whole fruit
+16,Medium Orange,whole fruit
+18,Watermelon,small bowl
+19,1 teaspoon fenugreek / methi seeds soaked overnight in water,tbsp
+20,Cucumber salad,small bowl
+21,Curd,small bowl
+22,Curd (skimmed milk),small bowl
+23,Curd (thick),small bowl
+24,Guava,whole fruit
+25,Guava (medium size),whole fruit
+26,Lukewarm Water (Lemon),glass
+27,Egg white omlette,Egg White
+28,Omlette,Egg White
+29,Spinach,small bowl
+30,Grilled chicken,pieces
+31,Sprout stuffed roti (no ghee),Roti/Chapati
+32,Coriander mint chutney,tbsp
+33,Buttermilk,cup
+34,Mixed vegetable salad,small bowl
+35,Bhindi,small bowl
+36,Roti (without ghee),Roti/Chapati
+37,Channa Dal,small bowl
+38,tea,cup
+39,Bhel chaat,small bowl
+40,Carrot & lettuce salad,small bowl
+41,Paneer (low fat) & capsicum bhurji,small bowl
+42,Poha,small bowl
+43,Masoor Dal,small bowl
+44,Cabbage vegetable,small bowl
+45,coffee,cup
+46,Roasted channa,small bowl
+47,Beans vegetable,small bowl
+48,"Besan cheela with onion, carrot & coriander",pieces
+49,White choley,small bowl
+50,Boiled rice,small bowl
+52,Palak dal,small bowl
+53,Green Tea,cup
+54,Jeera water,glass
+62,Oats porridge with cinnamon,small bowl
+63,Rajma,small bowl
+64,Channa dal with lauki,small bowl
+65,Green Chutney,tbsp
+66,Hard boiled eggs,egg white
+67,Roasted Makhana,small bowl
+68,Beetroot Raita,small bowl
+69,Chole Chaat,small bowl
+70,Soya-chilli Capsicum,small bowl
+71,Idli,pieces
+72,Sambar with vegetable,small bowl
+73,Roasted peas,small bowl
+74,"Tomato, Cucumber & low-fat paneer sandwich",pieces
+75,"Kala channa sprouts salad with onion, tomato, cucumber",small bowl
+76,Yellow dal,small bowl
+77,"Mix vegetable pulao (carrot,beans, cauliflower)",small bowl
+78,Soyabean & capsicum vegetable,small bowl
+79,"Green gram sprouts (with onion, tomato, cucumber & coriander)",small bowl
+80,Green gram dal,small bowl
+81,Gobi alu,small bowl
+82,Bhel puri with boiled moong dal mix,small bowl
+83,Paneer (low fat) tikka masala,small bowl
+84,Mix vegetable,small bowl
+85,Palak paneer,small bowl
+86,Dhokla,pieces
+87,Moong dal,small bowl
+88,Dal Paratha,pieces
+89,Sprouts lettuce salad,small bowl
+90,Missi Roti,Roti/Chapati
+92,Curd rice,small bowl
+93,Milk Tea (without sugar),cup
+94,Paneer Sandwich,pieces
+95,Khichri (moong dal),bowl
+96,Soyabean curry,bowl
+97,Baingan bharta,bowl
+98,Roasted peanuts,small bowl
+101,Lauki sabzi,bowl
+102,Boiled channa chat,small bowl
+103,Quinoa khichri,bowl
+108,Sauteed Mushrooms,small bowl
+109,Paneer curry,bowl
+110,Tofu curry,small bowl
+111,Soyabean salad,small bowl
+112,Paneer Paratha,pieces
+113,Moong sprouts,small bowl
+117,Moong Dal vegetable cheela,pieces
+118,Masala omlette,egg white
+119,Tandoor or fish tikka,small bowl
+120,Chicken soup,small bowl
+121,Brown Rice,small bowl
+122,Lemon coriander soup,small bowl
+123,Multi grain toast,pieces
+124,Methi aloo,small bowl
+125,Chicken curry,small bowl
+126,Roasted Moong Dal,bowl
+127,Toor Dal,small bowl
+128,"Onion, tomato salad",small bowl
+129,Moong Dal cheela with paneer Stuffing,pieces
+130,Toast with coriander chutney,pieces
+131,Methi vegetable,small bowl
+132,Toast,pieces
+133,Gajar matar,small bowl
+134,Besan & oats cheela,pieces
+135,Besan Kadhi(No Pakoda),small bowl
+136,Hot & sour soup,small bowl
+137,Oats porridge in skimmed milk,small bowl
+138,Oats & carrot idli,pieces
+139,Kala chana,small bowl
+140,Palak saag,small bowl
+141,Paneer bhurji,small bowl
+142,Radish & Carrot Salad,small bowl
+143,Sesame soya garlic chicken,small bowl
+144,Egg masala bhurji,egg white
+145,"Onion, cucumber, tomato raita",small bowl
+146,Tandoori chicken,small bowl
+147,Cabbage fry,bowl
+148,Peas curry,small bowl
+149,Chia Pudding,bowl
+150,Bitter gourd fry,small bowl
+151,Ragi Roti,Roti/Chapati
+152,Tomato Soup,small bowl
+153,Onion Chutney,tbsp
+154,Moong Daal vegetable dosa,pieces
+155,Coconut Chutney,tbsp
+156,Upma,bowl
+157,Pongal,bowl
+158,Vegetable Soup,bowl
+159,Oats Masala,cup
+160,Beans Curry,small bowl
+161,Veggie Vermicelli,bowl
+162,Pumpkin Payar Curry,bowl
+163,Fish Curry,small bowl
+164,Chicken Sandwich (multigrain Bread),pieces
+165,Tomato Chutney,tbsp
+166,Egg dosa,pieces
+167,Whole wheat pasta,small bowl
+168,Vegetable Upma,small bowl
+169,Cucumber Raita,small bowl
+170,Baked Sweet Potatoes,small bowl
+171,Ginger Water,glass
+172,Mixed nut,tbsp
+173,Mixed Fruit,bowl
+174,Grilled Corn,pieces
+175,Methi & carrort vegetable,small bowl
+176,Kala Chana Soup,small bowl
+177,Ragi Dosa,pieces
+178,Chickpeas sundal,small bowl
+179,Spinach vegetable,small bowl
+180,Rasam,small bowl
+181,Appam,pieces
+182,Baingan Sabji,bowl
+183,Beasn oats cheela,pieces
+184,Black eyed peas curry,small bowl
+185,Brown rice with mushroom,small bowl
+186,Buckwheat cheela with carrot and onion,pieces
+187,Carrot & cabbage vegetable,small bowl
+188,Carrot & cucumber salad,small bowl
+189,Cauliflower vegetable,small bowl
+190,Chicken Tikka,bowl
+191,Coriander coconut chutney,tbsp
+192,Cucumber kosambari/ kosumalli,small bowl
+193,Egg bhurji with Onion & Capsicum,egg white
+194,Ginger chicken masala,small bowl
+195,Green gram dosa (Pesarattu),pieces
+196,Grilled chicken tikka & capsicum,small bowl
+197,Kadla/ channa curry,small bowl
+198,Kidney beans curry,small bowl
+199,Lentil Sambar,small bowl
+200,Masala Bhurji,egg white
+201,Masala buttermilk,glass
+202,Medium oats carrot idli,pieces
+203,Medium Plain ragi dosa,pieces
+204,Milk Idyappam,pieces
+205,Milk/ Buttermilk,cup
+206,Mint Curd,tbsp
+207,Mix vegetable pulao,small bowl
+208,Mixed sprout curry,small bowl
+209,Mixveg torrancurry,bowl
+210,Medium Ragi dosa,pieces
+211,"Egg Curry(2 egg whites, no yello)",small bowl
+212,"Oatmeal with apple & cinnamon(Oats, Soya Milk, Apple)",small bowl
+213,Oats uthappam,pieces
+214,Puttu,pieces
+215,Scrambled egg,egg white
+216,Soya Uttapam,pieces
+217,Whole wheat toast,pieces
+218,,-
+219,Adai dosa,pieces
+220,Avial curry,bowl
+221,Beans & carrot palya/ poriyal,small bowl
+222,Beetroot paly/poriyal,small bowl
+223,"Besan & oats cheela (spinach, carrot & onions)",pieces
+224,Besan kadhi (no pakoda),small bowl
+225,Boiled Rajma Chat,small bowl
+226,Bottle gourd palya/ poriyal,small bowl
+227,Capsicum vegetable,small bowl
+228,Chicken Biryani,small bowl
+229,Chicken Stew,bowl
+230,Chole Dal,bowl
+231,"Cinnamon, ginger with hot water",glass
+232,Cucumber and onion salad,small bowl
+233,Egg Curry,small bowl
+234,Finger millet (ragi) idli,pieces
+235,Finger millet chapati,pieces
+236,Gatte ki Sabji,small bowl
+237,Gourd palya/poriyal,small bowl
+238,Green gram whole dal,small bowl
+239,Grilled surmai,pieces
+240,Lemon rice,small bowl
+241,Masala omelette,pieces
+242,Medium Oats uttapam,pieces
+243,Mix vegetable subzi,bowl
+244,"Moong dal cheela with paneer, carrot 
+& coriander stuffing",pieces
+245,Moong Dal Dosaa/ Pessarttu,pieces
+246,Moongdal vegetable pongal,bowl
+247,Multi-grain/whole-wheat Toast,pieces
+248,Mushroom & green capsicum vegetable,small bowl
+249,Oats and vegetable upma,small bowl
+250,Oats vegetable upma,small bowl
+251,onion & tomato chutney,tbsp
+252,"Paneer, cucumber, tomato & coriander chutney sandwich 
+(whole wheat bread)",pieces
+253,Paneer/ Tofu Curry,bowl
+254,Parval Vegetable,small bowl
+255,Pepper rasam,small bowl
+256,Plain dosa,pieces
+257,Pumpkin seeds,tsp
+258,Ragi Idli,pieces
+259,Red lentil dal,small bowl
+260,Red lentils and spinach daal,small bowl
+261,Scrambled egg white,egg white
+262,"Scrambled egg with 2 egg white (masala bhurji onion, capsicum)",small bowl
+263,Scrambled Paneer(Paneer Bhurji) with onion capsicum,bowl
+264,Soya chunks and capsicum curry,small bowl
+265,Soya chunks pulao,small bowl
+266,Tamarind rice(Brown rice),small bowl
+267,Tea with toned milk(No sugar),cup
+268,Tomato Fish Curry,small bowl
+269,Vegetable vermicilli Upma,small bowl
+270,Chickpea Sprouts,bowl
+271,Flax seeds,tsp
+272,Hard Boiled Egg White,egg white
+273,Kiwi,whole fruit
+274,Lemon,glass
+275,Milk,glass
+276,Mushroom,small bowl
+277,Radish,small bowl
+278,Chickpeas,small bowl
+279,Peas,small bowl
+280,,-
+281,Moong Dal Vegetable Khichri,small bowl
+282,Moong Dal+Suji mix cheela,pieces
+283,Oats idli,pieces
+284,Omelet with spinach & mushroom -2 egg white,pieces
+285,"Onion, tomato utthapam",pieces
+286,Palak Chicken,bowl
+287,Paneer & peas curry,small bowl
+288,Paneer and capsicum curry,small bowl
+289,Paneer capsicum burji,small bowl
+290,Paniyaram,pieces
+291,Pumpkin Sabji,small bowl
+292,Sautee Paneer Pcs,small bowl
+293,Spinach & chicken curry,small bowl
+294,Spinach & mushroom omlette,egg white
+295,Sprouted moong salad,small bowl
+296,Tamarind rice,small bowl
+297,Tomatto Chutney,small bowl
+298,"Veg pongal(1/2 tsp oil, no ghee)",small bowl
+299,Vegetable Daliya,bowl
+300,Vegetable Paneer Salad,bowl
+301,Vegetable stew (less oil & coconut milk lots of vegetables),small bowl
+302,Wheat or muti-grain toast,pieces
+303,Multigrain Roti,Roti/Chapati
+304,Plain Buttermilk,glass
+305,Carrot Beetroot Salad,small bowl
+306,Veg Pulao,small bowl
+307,Chickpea curry,small bowl
+308,Mix Dal,small bowl
+309,Red lentils & spinach,small bowl
+310,Quinoa,small bowl
+311,Oats masala uthappam,pieces
+312,Paneer capsicum vegetables,small bowl
+313,Sprouts & paneer salad,bowl
+314,Muesli with nuts,bowl
+315,Paneer Tikka,small bowl
+316,Ridge gourd vegetable,small bowl
+317,Oats upma with vegetables,small bowl
+319,Beetroot salad,small bowl
+320,Dry Payar Curry,small bowl
+321,oat chia seed porridge,bowl
+322,Lauki Paneer,small bowl
+323,Steamed Rice,small bowl
+324,Peanut Chat,small bowl
+325,Methi Paratha,pieces
+326,whole wheat paneer tikka wrap,pieces
+327,Muesli with milk and almonds,bowl
+328,Cinnamon Water,glass
+329,Whole Grain Wheat Flakes,pieces
+330,Peanut chutney,small bowl
+331,Peanuts,small bowl
+332,puffed rice/ sukhe bhel,small bowl
+333,Paneer,small bowl
+334,Spinach walnut salad,bowl
+335,Chia seeds,tbsp
+336,Olive Oil,-
+337,Ajwain & tulsi water,glass
+338,bhinda ni sabzi,small bowl
