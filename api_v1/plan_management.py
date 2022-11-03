@@ -4,7 +4,7 @@ import json
 from flask import Blueprint, request, jsonify, make_response
 from extensions import db
 from models.plan_schedule_model import Plan_Schedule, Planned_Meal
-from schemas.plan_schedule_schema import PlanScheduleSchema, PlannedMealSchema
+from schemas.plan_schedule_schema import PlanScheduleSchema, PlannedMealSchema,DefaultServingPlanScheduleSchema
 from schemas.plan_schedule_schema import PlanScheduleWithoutRecipeSchema
 
 from models.day_model import Day
@@ -40,6 +40,8 @@ plan_schedule_schema_list = PlanScheduleSchema(many = True)
 
 plan_schedule_without_recipe_schema = PlanScheduleWithoutRecipeSchema()
 plan_schedule_without_recipe_schema_list = PlanScheduleWithoutRecipeSchema(many = True)
+
+plan_schedule_list_with_default_serving_list = DefaultServingPlanScheduleSchema(many=True)
 
 day_schema = DaySchema()
 day_schema_list = DaySchema(many = True)
@@ -493,7 +495,7 @@ def list_meal_plan_schedule(planId, dayId):
 
         t2 = time.time()
         print('Schedule Query Time : ', round(t2 - t1, 3))
-        plan_data = plan_schedule_schema_list.dump(plan_schedule_data)
+        plan_data = plan_schedule_list_with_default_serving_list.dump(plan_schedule_data)
 
         t3 = time.time()
         print('Schedule Query Dump Time : ', round(t3 - t2, 3))
@@ -520,12 +522,17 @@ def list_meal_plan_schedule(planId, dayId):
                 t6 = time.time()
 
                 recipe = process_planned_meal_recipe(recipe, meal_data)
+
+                serving_unit_ratio = 1
+
+                if recipe['default_serving_unit']:
+                    print(recipe['default_serving_unit'])
+                    if recipe['default_serving_unit']['serving_unit_quantity']:
+                        serving_unit_ratio = meal_data['serving']['size'] / recipe['default_serving_unit']['serving_unit_quantity']
                 recipe['per_serving_wt'] = recipe['per_serving']
                 del recipe['per_serving']
-                recipe['serving']['total_serving_wt'] = recipe['per_serving_wt']*recipe['serving']['quantity']
+                recipe['serving']['total_serving_wt'] = recipe['per_serving_wt']*recipe['serving']['quantity']*serving_unit_ratio
                 del recipe['serving']['size']
-
-
 
             data[plan['timing']['timing_label']] = plan['recipes']
         t8 = time.time()

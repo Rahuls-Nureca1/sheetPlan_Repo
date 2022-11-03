@@ -3,7 +3,7 @@ from marshmallow import Schema, fields
 from models.plan_schedule_model import Planned_Meal
 from schemas.plan_schema import PlanSchema
 from schemas.day_schema import DaySchema
-from schemas.recipe_schema import RecipeSchema
+from schemas.recipe_schema import RecipeSchema,PlanRecipeSchema
 from schemas.timing_schema import TimingSchema
 from schemas.ingredient_serving_unit_schema import ServingUnitSchema
 
@@ -33,4 +33,8 @@ class PlanScheduleWithoutRecipeSchema(Schema):
     plan = fields.Nested(PlanSchema, many=False)
     day = fields.Nested(DaySchema, many=False)
     timing = fields.Nested(TimingSchema, many=False)
-  
+
+
+
+class DefaultServingPlanScheduleSchema(PlanScheduleSchema):
+    recipes = fields.Nested(PlanRecipeSchema, many=True)

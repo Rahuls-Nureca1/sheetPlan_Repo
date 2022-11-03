@@ -19,3 +19,7 @@ class ServingUnitSchema(Schema):
   
 
         
+class DefaultServingUnitSchema(Schema):
+
+    serving_unit_name = fields.Str()
+    serving_unit_quantity = fields.Int()

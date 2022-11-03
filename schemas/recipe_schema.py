@@ -2,6 +2,7 @@ from marshmallow import Schema, fields,  validates, ValidationError
 import datetime
 from models.plan_schedule_model import Planned_Meal
 from schemas.ingredient_schema import IngredientSchema
+from schemas.ingredient_serving_unit_schema import DefaultServingUnitSchema
 import collections
 import functools
 import operator
@@ -40,6 +41,7 @@ class RecipeSchema(Schema):
     micros= fields.Method("calculate_micros")
     per_serving = fields.Method("calculate_per_serving")
     plan_Schedule = fields.Nested(Planned_Meal,many=True)
+
     def calculate_macros(self, obj):
         macros = []
         
@@ -108,3 +110,7 @@ class CreateIngredientSchema(Schema):
     quantity_in_gram = fields.Str(required=True,allow_none=True)
     serving_unit = fields.Str(required=True,allow_none=False)
     nin_id = fields.Int(required=True,allow_none=True)
+
+
+class PlanRecipeSchema(RecipeSchema):
+    default_serving_unit = fields.Nested(DefaultServingUnitSchema,many=False)

@@ -18,10 +18,14 @@ def process_planned_meal_recipe(recipe, planned_meal):
     """
     # Calculate nutrition as per quantity in planned meal
     meal_servings_ratio = planned_meal['quantity'] / recipe['serving']
+    serving_unit_ratio = 1
+    if recipe['default_serving_unit']:
+        if recipe['default_serving_unit']['serving_unit_quantity']:
+            serving_unit_ratio = planned_meal['serving']['size'] / recipe['default_serving_unit']['serving_unit_quantity']
     for type in ['macros', 'micros']:
         for nutrient in recipe[type]:
             nutrient['value'] = round(
-                nutrient['value'] * meal_servings_ratio, 2)
+                nutrient['value'] * meal_servings_ratio * serving_unit_ratio, 2)
 
     # Update serving info
     recipe['serving'] = planned_meal['serving']
