@@ -60,6 +60,8 @@ class Recipe( db.Model):
     website_name = db.Column(db.String)
     serving = db.Column(db.Integer)
     ingredients = db.relationship('Ingredient', backref='recipe')
+    default_serving_unit_id = db.Column(db.Integer, db.ForeignKey('ingredient_serving_unit.id'), nullable=True)
+    default_serving_unit = db.relationship('IngredientServingUnit', backref = 'recipe')
    
     deleted = db.Column(db.Boolean, default = False)
     updated_by = db.Column(db.Integer)
