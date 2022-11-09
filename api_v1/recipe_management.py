@@ -10,6 +10,7 @@ from schemas.recipe_schema import RecipeSchema, CreateIngredientSchema
 from schemas.ingredient_schema import IngredientSchema
 from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
 from utils import api_logger, nin_mapping
+from utils.update_ingredient_details import update_ingredient_weight
 import os
 from models.plan_schedule_model import Planned_Meal
 from sqlalchemy import func
@@ -92,7 +93,9 @@ def create_recipe():
 
                 nin_id = suggested_nin_list[0]['id'] if len(suggested_nin_list) else None
 
-            
+                if serving_size != matched_serving_unit['serving_unit_quantity']:
+                    if nin_id:
+                        update_ingredient_weight(nin_id,serving_size,matched_serving_unit['serving_unit_quantity'])
 
                 # map ingredient with NIN table based on standardname
                 if len(suggested_nin_list):
@@ -193,7 +196,9 @@ def create_multiple_recipe():
 
                     nin_id = suggested_nin_list[0]['id'] if len(suggested_nin_list) else None
 
-                
+                    if serving_size != matched_serving_unit['serving_unit_quantity']:
+                        if nin_id:
+                            update_ingredient_weight(nin_id,serving_size,matched_serving_unit['serving_unit_quantity'])
 
                     # map ingredient with NIN table based on standardname
                     if len(suggested_nin_list):
@@ -296,6 +301,10 @@ def create_nin_recipe():
                     nin_id = nin.id
                     suggested_nin_list  = []
                     suggested_nin_list.append(nin_data)
+
+                    if serving_size != matched_serving_unit['serving_unit_quantity']:
+                        if nin_id:
+                            update_ingredient_weight(nin_id,serving_size,matched_serving_unit['serving_unit_quantity'])
 
 
                 # map ingredient with NIN table based on standardname
@@ -513,8 +522,10 @@ def add_recipe_ingredient(recipe_id):
                 if matched_serving_unit != None:
                     serving_unit_id = matched_serving_unit['id']
                     serving_size = matched_serving_unit['serving_unit_quantity']
-                quantity_in_gram = i['quantity_in_gram'] if i['quantity_in_gram'] != None else serving_size * i['quantity']
+                if i['quantity_in_gram'] != None:
+                        serving_size = i['quantity_in_gram']
                 
+                quantity_in_gram = serving_size * i['quantity']
 
                 #find maping from nin table if nin_id is passed in payload
                 if i['nin_id'] == None or i['nin_id'] == 0:
@@ -528,7 +539,10 @@ def add_recipe_ingredient(recipe_id):
                         suggested_nin_list =  []
                     suggested_nin_list = nin_ingredient_schema_list.dump(data)
 
-
+                if serving_size != matched_serving_unit['serving_unit_quantity']:
+                    if len(suggested_nin_list):
+                        if update_ingredient_weight(suggested_nin_list[0]['id'],serving_size,matched_serving_unit['serving_unit_quantity']):
+                            print("Weight updated for all ingredients.")
             
 
                 # map ingredient with NIN table based on standardname

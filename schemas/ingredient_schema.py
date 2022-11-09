@@ -1,5 +1,6 @@
-
 from marshmallow import Schema, fields
+from schemas.ingredient_serving_unit_schema import DefaultServingUnitSchema
+from schemas.nin_ingredient_schema import NININgredientSchema
 
 class IngredientSchema(Schema):
 
@@ -15,5 +16,8 @@ class IngredientSchema(Schema):
     serving_unit = fields.Str()
     macros = fields.Raw()
     micros = fields.Raw()
- 
+
+class IngredientDetailsUpdateSchema(IngredientSchema):
+    serving_unit_details = fields.Nested(DefaultServingUnitSchema,many=False)
+    nin_details = fields.Nested(NININgredientSchema,many=False)
         
