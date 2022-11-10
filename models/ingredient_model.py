@@ -8,7 +8,6 @@ class Ingredient( db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
     nin_id = db.Column(db.Integer, db.ForeignKey('nin_ingredient.id'), nullable=True)
-    nin_details = db.relationship('NIN_Ingredient', backref = 'Ingredient')
     ingredient_name = db.Column(db.String)
     ingredient_standard_name = db.Column(db.String)
     ingredient_desc = db.Column(db.String)

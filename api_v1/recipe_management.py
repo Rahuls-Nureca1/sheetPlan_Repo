@@ -84,8 +84,6 @@ def create_recipe():
                 quantity_in_gram = serving_size * i['quantity']
                 
 
-               
-
                 # ingredient_list.append(Ingredient(i['recipe_id'],None, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit']))
                 
                 #find maping from nin table
@@ -95,7 +93,7 @@ def create_recipe():
 
                 if serving_size != matched_serving_unit['serving_unit_quantity']:
                     if nin_id:
-                        update_ingredient_weight(nin_id,serving_size,matched_serving_unit['serving_unit_quantity'])
+                        update_ingredient_weight(suggested_nin_list[0],serving_size,matched_serving_unit['serving_unit_quantity'])
 
                 # map ingredient with NIN table based on standardname
                 if len(suggested_nin_list):
@@ -187,8 +185,6 @@ def create_multiple_recipe():
                     quantity_in_gram = serving_size * i['quantity']
                     
 
-                
-
                     # ingredient_list.append(Ingredient(i['recipe_id'],None, i['ingredient_name'],i['ingredient_standard_name'], i['ingredient_desc'], i['quantity'], quantity_in_gram,serving_unit_id,i['serving_unit']))
                     
                     #find maping from nin table
@@ -196,17 +192,15 @@ def create_multiple_recipe():
 
                     nin_id = suggested_nin_list[0]['id'] if len(suggested_nin_list) else None
 
-                    if serving_size != matched_serving_unit['serving_unit_quantity']:
-                        if nin_id:
-                            update_ingredient_weight(nin_id,serving_size,matched_serving_unit['serving_unit_quantity'])
-
                     # map ingredient with NIN table based on standardname
                     if len(suggested_nin_list):
+                        if serving_size != matched_serving_unit['serving_unit_quantity']:
+                            update_ingredient_weight(suggested_nin_list[0],serving_size,matched_serving_unit['serving_unit_quantity'])
                         # if there is more than one match take the best match
                         macros = suggested_nin_list[0]['macros']
                         micros = suggested_nin_list[0]['micros']
-                        print('macros', macros)
-                        print('micros', micros)
+                        print('macros:', macros)
+                        print('micros:', micros)
                         multiplication_factor = quantity_in_gram/100
                         for key in macros:
                             if macros[key] == '':
@@ -302,13 +296,10 @@ def create_nin_recipe():
                     suggested_nin_list  = []
                     suggested_nin_list.append(nin_data)
 
-                    if serving_size != matched_serving_unit['serving_unit_quantity']:
-                        if nin_id:
-                            update_ingredient_weight(nin_id,serving_size,matched_serving_unit['serving_unit_quantity'])
-
-
                 # map ingredient with NIN table based on standardname
                 if len(suggested_nin_list):
+                    if serving_size != matched_serving_unit['serving_unit_quantity']:
+                            update_ingredient_weight(suggested_nin_list[0],serving_size,matched_serving_unit['serving_unit_quantity'])
                     # if there is more than one match take the best match
                     macros = suggested_nin_list[0]['macros']
                     micros = suggested_nin_list[0]['micros']
@@ -538,15 +529,12 @@ def add_recipe_ingredient(recipe_id):
                     if len(data) == 0:
                         suggested_nin_list =  []
                     suggested_nin_list = nin_ingredient_schema_list.dump(data)
-
-                if serving_size != matched_serving_unit['serving_unit_quantity']:
-                    if len(suggested_nin_list):
-                        if update_ingredient_weight(suggested_nin_list[0]['id'],serving_size,matched_serving_unit['serving_unit_quantity']):
-                            print("Weight updated for all ingredients.")
             
 
                 # map ingredient with NIN table based on standardname
                 if len(suggested_nin_list):
+                    if serving_size != matched_serving_unit['serving_unit_quantity']:
+                            update_ingredient_weight(suggested_nin_list[0],serving_size,matched_serving_unit['serving_unit_quantity'])
                     # if there is more than one match take the best match
                     macros = suggested_nin_list[0]['macros']
                     micros = suggested_nin_list[0]['micros']
