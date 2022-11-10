@@ -107,7 +107,7 @@ class CreateIngredientSchema(Schema):
     ingredient_standard_name = fields.Str(required=True,allow_none=False)
     ingredient_desc = fields.Str(required=True,allow_none=False)
     quantity = fields.Int(required=True,allow_none=False)
-    quantity_in_gram = fields.Str(required=True,allow_none=True)
+    quantity_in_gram = fields.Int(required=True,allow_none=True)
     serving_unit = fields.Str(required=True,allow_none=False)
     nin_id = fields.Int(required=True,allow_none=True)
 
