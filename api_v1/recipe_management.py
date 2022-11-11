@@ -39,7 +39,7 @@ nin_ingredient_schema_list = NININgredientSchema(many = True)
 
 # TODO:
 # Implement create recipe
-@recipe_management_bp.route('/', methods=['POST'])
+@recipe_management_bp.route('/', methods=[''])
 def create_recipe():
     try:
         serving_data = IngredientServingUnit.query.all()
@@ -143,7 +143,7 @@ def create_recipe():
 
 # TODO:
 # Implement create multiple recipe
-@recipe_management_bp.route('/multiple-recipe', methods=['POST'])
+@recipe_management_bp.route('/multiple-recipe', methods=[''])
 def create_multiple_recipe():
     try:
         serving_data = IngredientServingUnit.query.all()
@@ -250,7 +250,7 @@ def create_multiple_recipe():
 
 # TODO:
 # Implement create nin recipe
-@recipe_management_bp.route('/nin_recipe', methods=['POST'])
+@recipe_management_bp.route('/nin_recipe', methods=[''])
 def create_nin_recipe():
     try:
         serving_data = IngredientServingUnit.query.all()
@@ -392,7 +392,7 @@ def search_recipe():
 
 # TODO:
 # Implement update recipe
-@recipe_management_bp.route('/<recipe_id>', methods=['PUT'])
+@recipe_management_bp.route('/<recipe_id>', methods=[''])
 def update_recipe(recipe_id):
     try:
         
@@ -451,7 +451,7 @@ def recipe_list_search(offset,limit, recipe_name):
 
 # TODO:
 # Implement delete recipe 
-@recipe_management_bp.route('/<id>', methods=['DELETE'])
+@recipe_management_bp.route('/<id>', methods=[''])
 def delete_recipe(id):
     try:
         recipe = Recipe.query.filter(Recipe.id == id).update({Recipe.deleted : True})
@@ -471,7 +471,7 @@ def delete_recipe(id):
 
 # TODO:
 # Implement add recipe Ingredient
-@recipe_management_bp.route('/<recipe_id>/ingredient', methods=['POST'])
+@recipe_management_bp.route('/<recipe_id>/ingredient', methods=[''])
 def add_recipe_ingredient(recipe_id):
     try:
         serving_data = IngredientServingUnit.query.all()
@@ -578,7 +578,7 @@ def add_recipe_ingredient(recipe_id):
         
 
 
-@recipe_management_bp.route('/recipe/<recipe_id>/ingredient/<ingredient_id>', methods=['POST'])
+@recipe_management_bp.route('/recipe/<recipe_id>/ingredient/<ingredient_id>', methods=[''])
 def update_recipe_ingredient(recipe_id,ingredient_id):
     """
     Update recipe ingredient
@@ -659,7 +659,7 @@ def update_recipe_ingredient(recipe_id,ingredient_id):
 
 # TODO:
 # Implement delete recipe ingredient 
-@recipe_management_bp.route('/ingredient/<id>', methods=['DELETE'])
+@recipe_management_bp.route('/ingredient/<id>', methods=[''])
 def delete_ingredient(id):
     try:
         ingredient = Ingredient.query.filter(Ingredient.id == id).delete()
@@ -711,7 +711,7 @@ def delete_ingredient(id):
 
 # TODO:
 # Implement nin ingredient maping
-@recipe_management_bp.route('/<ingredient_id>/<nin_id>', methods=['PUT'])
+@recipe_management_bp.route('/<ingredient_id>/<nin_id>', methods=[''])
 def map_ingredient(ingredient_id, nin_id):
     try:
         ingredient = Ingredient.query.filter_by(id = ingredient_id).first()

@@ -78,7 +78,7 @@ def get_plan_type():
 
 # TODO:
 # Implement create plan type
-@plan_management_bp.route('/plan_type', methods=['POST'])
+@plan_management_bp.route('/plan_type', methods=[''])
 def create_plan_type():
     try:
         req_body = request.get_json()
@@ -92,7 +92,7 @@ def create_plan_type():
 
 # TODO:
 # Implement update plan type
-@plan_management_bp.route('/plan_type/<id>', methods=['PUT'])
+@plan_management_bp.route('/plan_type/<id>', methods=[''])
 def update_plan_type(id):
     try:
         req_body = request.get_json()
@@ -108,7 +108,7 @@ def update_plan_type(id):
 
 # TODO:
 # Implement delete plan type
-@plan_management_bp.route('/plan_type/<id>', methods=['DELETE'])
+@plan_management_bp.route('/plan_type/<id>', methods=[''])
 def delete_plan_type(id):
     try:
        
@@ -136,7 +136,7 @@ def get_days():
 
 # TODO:
 # Implement create day
-@plan_management_bp.route('/day', methods=['POST'])
+@plan_management_bp.route('/day', methods=[''])
 def create_day():
     try:
         req_body = request.get_json()
@@ -150,7 +150,7 @@ def create_day():
 
 # TODO:
 # Implement update day
-@plan_management_bp.route('/day/<id>', methods=['PUT'])
+@plan_management_bp.route('/day/<id>', methods=[''])
 def update_day(id):
     try:
         req_body = request.get_json()
@@ -166,7 +166,7 @@ def update_day(id):
 
 # TODO:
 # Implement delete day
-@plan_management_bp.route('/day/<id>', methods=['DELETE'])
+@plan_management_bp.route('/day/<id>', methods=[''])
 def delete_day(id):
     try:
        
@@ -197,7 +197,7 @@ def get_timings():
 
 # TODO:
 # Implement create timing
-@plan_management_bp.route('/timing', methods=['POST'])
+@plan_management_bp.route('/timing', methods=[''])
 def create_timing():
     try:
         req_body = request.get_json()
@@ -211,7 +211,7 @@ def create_timing():
 
 # TODO:
 # Implement update timing
-@plan_management_bp.route('/timing/<id>', methods=['PUT'])
+@plan_management_bp.route('/timing/<id>', methods=[''])
 def update_timing(id):
     try:
         req_body = request.get_json()
@@ -227,7 +227,7 @@ def update_timing(id):
 
 # TODO:
 # Implement delete timing
-@plan_management_bp.route('/timing/<id>', methods=['DELETE'])
+@plan_management_bp.route('/timing/<id>', methods=[''])
 def delete_timing(id):
     try:
        
@@ -246,7 +246,7 @@ def delete_timing(id):
 ########## Schedule Plan ##########
 # TODO:
 # Implement create plan schedule ie. createing plans
-@plan_management_bp.route('/', methods=['POST'])
+@plan_management_bp.route('/', methods=[''])
 def create_plan_schedule():
     try:
         req_body = request.get_json()
@@ -286,7 +286,7 @@ def list_plan_schedule():
     
 # TODO:
 # Implement update plan schedule
-@plan_management_bp.route('/<id>', methods=['PUT'])
+@plan_management_bp.route('/<id>', methods=[''])
 def update_plan_schedule(id):
     try:
         payload = request.get_json()
@@ -319,7 +319,7 @@ def update_plan_schedule(id):
 
 # TODO:
 # Implement delete plan schedule
-@plan_management_bp.route('/<id>', methods=['DELETE'])
+@plan_management_bp.route('/<id>', methods=[''])
 def delete_plan_management(id):
     try:
         plan_schedule = Plan_Schedule.query.filter_by(id = id).first()
@@ -340,7 +340,7 @@ def delete_plan_management(id):
 
 # TODO:
 # Implement create a meal plan
-@plan_management_bp.route('/planMeal', methods=['POST'])
+@plan_management_bp.route('/planMeal', methods=[''])
 def create_meal_plan():
     try:
       
@@ -379,7 +379,7 @@ def create_meal_plan():
 
 # TODO:
 # Implement create a meal plan by name
-@plan_management_bp.route('/planMealByName', methods=['POST'])
+@plan_management_bp.route('/planMealByName', methods=[''])
 def create_meal_plan_by_name():
     try:
       
@@ -457,7 +457,7 @@ def create_meal_plan_by_name():
 
 # TODO:
 # Implement create a meal plan
-@plan_management_bp.route('/delete-planned-meal', methods=['POST'])
+@plan_management_bp.route('/delete-planned-meal', methods=[''])
 def delete_meal_plan():
     try:
       

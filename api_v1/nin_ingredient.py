@@ -13,7 +13,7 @@ nin_schema_list = NININgredientSchema(many = True)
 
 # TODO:
 # Implement create NIN Ingredient
-@nin_ingredient_bp.route('/', methods=['POST'])
+@nin_ingredient_bp.route('/', methods=[''])
 @token_required
 def create_nin_ingredient(auth_data):
     try:
@@ -32,7 +32,7 @@ def create_nin_ingredient(auth_data):
 
 # TODO:
 # Implement delete NIN Ingredient
-@nin_ingredient_bp.route('/<id>', methods=['DELETE'])
+@nin_ingredient_bp.route('/<id>', methods=[''])
 @token_required
 def delete_nin_ingredient(auth_data,id):
     try:
@@ -51,7 +51,7 @@ def delete_nin_ingredient(auth_data,id):
     
 # TODO:
 # Implement update NIN Ingredient
-@nin_ingredient_bp.route('/<id>', methods=['PUT'])
+@nin_ingredient_bp.route('/<id>', methods=[''])
 @token_required
 def update_nin_ingredient(auth_data,id):
     try:
