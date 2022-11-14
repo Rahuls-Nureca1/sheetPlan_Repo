@@ -74,6 +74,6 @@ def create_user():
             return make_response({"success":False,"message":"Invalid email or password"}, 400)
    
     print('reg user', reg_user)
-    token = jwt.encode({"user_id": reg_user.id, "email": reg_user.email,"exp": datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(seconds=300)},SECRET_KEY,algorithm="HS256")
+    token = jwt.encode({"user_id": reg_user.id, "email": reg_user.email,"exp": datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(days=1)},SECRET_KEY,algorithm="HS256")
     return make_response({"success":True,"message":"User created successfully", "auth":{"token":token, "type": "Bearer"}}, 200)
     
