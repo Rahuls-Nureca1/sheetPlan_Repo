@@ -99,7 +99,7 @@ def nin_ingredient_by_id(auth_data,id):
 
 @nin_ingredient_bp.route('/search', methods=['GET'])
 @token_required
-def nin_ingredient_by_search_query(auth_data,id):
+def nin_ingredient_by_search_query(auth_data):
     try:
         search_query = request.args.get('search_query', None)
 
