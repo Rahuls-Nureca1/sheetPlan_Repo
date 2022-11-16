@@ -13,7 +13,7 @@ nin_schema_list = NININgredientSchema(many = True)
 
 # TODO:
 # Implement create NIN Ingredient
-@nin_ingredient_bp.route('/', methods=['POST'])
+@nin_ingredient_bp.route('', methods=['POST'])
 @token_required
 def create_nin_ingredient(auth_data):
     try:
@@ -74,7 +74,7 @@ def update_nin_ingredient(auth_data,id):
 
 # TODO:
 # Implement list NIN Ingredient
-@nin_ingredient_bp.route('/', methods=['GET'])
+@nin_ingredient_bp.route('', methods=['GET'])
 @token_required
 def list_nin_ingredient(auth_data):
     try:
@@ -97,6 +97,23 @@ def nin_ingredient_by_id(auth_data,id):
     except Exception as e:
         print('exception', e)
 
+@nin_ingredient_bp.route('/search', methods=['GET'])
+@token_required
+def nin_ingredient_by_search_query(auth_data):
+    try:
+        search_query = request.args.get('search_query', None)
+
+        if search_query == None:
+            return make_response({"message":"search_query is required"}, 400)
+        
+        nin = NIN_Ingredient.query.filter(NIN_Ingredient.deleted == False, NIN_Ingredient.ingredient_description.ilike(f'%{search_query}%'))
+
+        if nin == None:
+            return make_response({"success":False,"message":"Ingredient not found"}, 404)
+        else:
+            return make_response({"success":True,"data":nin_schema_list.dump(nin)}, 200)
+    except Exception as e:
+        print('exception', e)
 
 
 #for logging all the requests
