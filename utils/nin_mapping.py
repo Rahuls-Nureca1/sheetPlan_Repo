@@ -10,25 +10,27 @@ nin_schema_list = NININgredientSchema(many=True)
 
 def map_ingredient(item_name):
     data = NIN_Ingredient.query.filter(NIN_Ingredient.ingredient_description.ilike(f'%{item_name}%')| NIN_Ingredient.ingredient_name.ilike(f'%{item_name}%') ).all()
-    if len(data) == 0:
+    if not len(data):
         return []
     final_data = nin_schema_list.dump(data)
     L= []
-    if len(final_data):
-        for i,ingredient in enumerate(final_data):
-            word_list = []
-            word_list.extend(json.loads(ingredient["ingredient_description"]))
-            word_list.append(ingredient["ingredient_name"])
-            word_list =[x.lower() for x in word_list]
+    for i,ingredient in enumerate(final_data):
+        word_list = []
+        word_list.extend(json.loads(ingredient["ingredient_description"]))
+        word_list.append(ingredient["ingredient_name"])
+        word_list =[x.lower() for x in word_list]
 
-            data = {
-                "id": i,
-                "word_list": word_list
-            }
+        data = {
+            "id": i,
+            "word_list": word_list
+        }
 
-            L.append(data)
+        L.append(data)
     best_match_index,_ = string_matching(L, item_name.lower())
-    return [final_data[best_match_index]]
+    if best_match_index:
+        return [final_data[best_match_index]]
+    # No match found
+    return final_data
 
 def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
