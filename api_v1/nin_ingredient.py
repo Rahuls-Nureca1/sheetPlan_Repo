@@ -13,7 +13,7 @@ nin_schema_list = NININgredientSchema(many = True)
 
 # TODO:
 # Implement create NIN Ingredient
-@nin_ingredient_bp.route('/', methods=['POST'])
+@nin_ingredient_bp.route('', methods=['POST'])
 @token_required
 def create_nin_ingredient(auth_data):
     try:
@@ -74,7 +74,7 @@ def update_nin_ingredient(auth_data,id):
 
 # TODO:
 # Implement list NIN Ingredient
-@nin_ingredient_bp.route('/', methods=['GET'])
+@nin_ingredient_bp.route('', methods=['GET'])
 @token_required
 def list_nin_ingredient(auth_data):
     try:
