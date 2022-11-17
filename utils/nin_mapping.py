@@ -27,7 +27,7 @@ def map_ingredient(item_name):
 
         L.append(data)
     best_match_index,_ = string_matching(L, item_name.lower())
-    if best_match_index:
+    if best_match_index is not None:
         return [final_data[best_match_index]]
     # No match found
     return final_data
