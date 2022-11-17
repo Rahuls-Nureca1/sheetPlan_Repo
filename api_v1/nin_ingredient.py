@@ -106,7 +106,7 @@ def nin_ingredient_by_search_query(auth_data):
         if search_query == None:
             return make_response({"message":"search_query is required"}, 400)
         
-        nin = NIN_Ingredient.query.filter(NIN_Ingredient.deleted == False, NIN_Ingredient.ingredient_description.ilike(f'%{search_query}%'))
+        nin = NIN_Ingredient.query.filter(NIN_Ingredient.deleted == False, NIN_Ingredient.ingredient_description.ilike(f'%{search_query}%') | NIN_Ingredient.ingredient_name.ilike(f'%{search_query}%'))
 
         if nin == None:
             return make_response({"success":False,"message":"Ingredient not found"}, 404)
