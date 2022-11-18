@@ -422,8 +422,9 @@ def recipe_list(offset,limit):
             return make_response({"success":True,"data":[]}, 200)
 
         recipe_data = recipe_schema_list.dump(recipe.items)
+        total_recipes= Recipe.query.filter(Recipe.deleted == False).count()
 
-        return make_response({"success":True,"data":recipe_data}, 200)
+        return make_response({"success":True,"data":recipe_data,"total_recipes":total_recipes}, 200)
     except Exception as e:
         print('exception', e)
 
