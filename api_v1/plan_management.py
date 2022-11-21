@@ -568,7 +568,8 @@ def list_meal_plan_schedule(auth_data,planId,dayId):
 # TODO: Update API url to /plan/<plan_id>/day/<day_id>/new
 # Implement get meal plan from plan id and day id
 @plan_management_bp.route('/<planId>/<dayId>/new', methods=['GET'])
-def list_meal_plan_schedule_new(planId, dayId):
+@token_required
+def list_meal_plan_schedule_new(auth_data,planId, dayId):
     try:
 
         t1 = time.time()
@@ -627,7 +628,8 @@ def list_meal_plan_schedule_new(planId, dayId):
 
 
 @plan_management_bp.route('/plan/search', methods=['GET'])
-def search_plan_schedule():
+@token_required
+def search_plan_schedule(auth_data):
     """
     Search plan schedule by plan name and day
 
@@ -696,7 +698,8 @@ def search_plan_schedule():
 
 
 @plan_management_bp.route('/plan/<plan_id>', methods=['GET'])
-def get_plan_details(plan_id):
+@token_required
+def get_plan_details(auth_data,plan_id):
     """
     Get plan details by plan id
     
@@ -765,7 +768,8 @@ def get_plan_details(plan_id):
 # TODO:
 # Implement auto schedule plan
 @plan_management_bp.route('/auto-schedule', methods=['GET'])
-def auto_plan_schedule():
+@token_required
+def auto_plan_schedule(auth_data):
     try:
        
         plan = Plan.query.all()
@@ -799,7 +803,8 @@ def auto_plan_schedule():
 # TODO:
 # Implement get plan schedule by id
 @plan_management_bp.route('/<id>', methods=['GET'])
-def plan_schedule_by_id(id):
+@token_required
+def plan_schedule_by_id(auth_data,id):
     try:
         plan_schedule = Plan_Schedule.query.filter_by(id = id).first()
         if plan_schedule == None:

@@ -10,6 +10,7 @@ from schemas.recipe_schema import RecipeSchema, CreateIngredientSchema
 from schemas.ingredient_schema import IngredientSchema
 from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
 from utils import api_logger, nin_mapping
+from utils.auth_utils import token_required
 import os
 from models.plan_schedule_model import Planned_Meal
 from sqlalchemy import func
@@ -40,7 +41,8 @@ nin_ingredient_schema_list = NININgredientSchema(many = True)
 # TODO:
 # Implement create recipe
 @recipe_management_bp.route('/', methods=['POST'])
-def create_recipe():
+@token_required
+def create_recipe(auth_data):
     try:
         serving_data = IngredientServingUnit.query.all()
         serving_unit_list = serving_unit_schema_list.dump(serving_data)
@@ -144,7 +146,8 @@ def create_recipe():
 # TODO:
 # Implement create multiple recipe
 @recipe_management_bp.route('/multiple-recipe', methods=['POST'])
-def create_multiple_recipe():
+@token_required
+def create_multiple_recipe(auth_data):
     try:
         serving_data = IngredientServingUnit.query.all()
         serving_unit_list = serving_unit_schema_list.dump(serving_data)
@@ -251,7 +254,8 @@ def create_multiple_recipe():
 # TODO:
 # Implement create nin recipe
 @recipe_management_bp.route('/nin_recipe', methods=['POST'])
-def create_nin_recipe():
+@token_required
+def create_nin_recipe(auth_data):
     try:
         serving_data = IngredientServingUnit.query.all()
         serving_unit_list = serving_unit_schema_list.dump(serving_data)
@@ -341,7 +345,8 @@ def create_nin_recipe():
 
 
 @recipe_management_bp.route('/recipe/<int:recipe_id>', methods=['GET'])
-def get_recipe(recipe_id):
+@token_required
+def get_recipe(auth_data,recipe_id):
     """
     Get recipe by id
 
@@ -365,7 +370,8 @@ def get_recipe(recipe_id):
 
 
 @recipe_management_bp.route('/recipe/search', methods=['GET'])
-def search_recipe():
+@token_required
+def search_recipe(auth_data):
     """
     Search recipe by name
 
@@ -393,7 +399,8 @@ def search_recipe():
 # TODO:
 # Implement update recipe
 @recipe_management_bp.route('/<recipe_id>', methods=['PUT'])
-def update_recipe(recipe_id):
+@token_required
+def update_recipe(auth_data,recipe_id):
     try:
         
         req_body = request.get_json()
@@ -412,7 +419,8 @@ def update_recipe(recipe_id):
 # TODO:
 # Implement list recipe with pagination
 @recipe_management_bp.route('/<offset>/<limit>', methods=['GET'])
-def recipe_list(offset,limit):
+@token_required
+def recipe_list(auth_data,offset,limit):
     try:
 
         print('ofset', offset)
@@ -432,7 +440,8 @@ def recipe_list(offset,limit):
 # TODO:
 # Implement search recipe with pagination
 @recipe_management_bp.route('/<offset>/<limit>/<recipe_name>', methods=['GET'])
-def recipe_list_search(offset,limit, recipe_name):
+@token_required
+def recipe_list_search(auth_data,offset,limit, recipe_name):
     try:
 
         print('ofset', offset)
@@ -452,7 +461,8 @@ def recipe_list_search(offset,limit, recipe_name):
 # TODO:
 # Implement delete recipe 
 @recipe_management_bp.route('/<id>', methods=['DELETE'])
-def delete_recipe(id):
+@token_required
+def delete_recipe(auth_data,id):
     try:
         recipe = Recipe.query.filter(Recipe.id == id).update({Recipe.deleted : True})
         if recipe == 0:
@@ -472,7 +482,8 @@ def delete_recipe(id):
 # TODO:
 # Implement add recipe Ingredient
 @recipe_management_bp.route('/<recipe_id>/ingredient', methods=['POST'])
-def add_recipe_ingredient(recipe_id):
+@token_required
+def add_recipe_ingredient(auth_data,recipe_id):
     try:
         serving_data = IngredientServingUnit.query.all()
         serving_unit_list = serving_unit_schema_list.dump(serving_data)
@@ -579,7 +590,8 @@ def add_recipe_ingredient(recipe_id):
 
 
 @recipe_management_bp.route('/recipe/<recipe_id>/ingredient/<ingredient_id>', methods=['POST'])
-def update_recipe_ingredient(recipe_id,ingredient_id):
+@token_required
+def update_recipe_ingredient(auth_data,recipe_id,ingredient_id):
     """
     Update recipe ingredient
     Allows to update the ingredient name, description, quantity, serving unit
@@ -660,7 +672,8 @@ def update_recipe_ingredient(recipe_id,ingredient_id):
 # TODO:
 # Implement delete recipe ingredient 
 @recipe_management_bp.route('/ingredient/<id>', methods=['DELETE'])
-def delete_ingredient(id):
+@token_required
+def delete_ingredient(auth_data,id):
     try:
         ingredient = Ingredient.query.filter(Ingredient.id == id).delete()
         if ingredient == 0:
@@ -712,7 +725,8 @@ def delete_ingredient(id):
 # TODO:
 # Implement nin ingredient maping
 @recipe_management_bp.route('/<ingredient_id>/<nin_id>', methods=['PUT'])
-def map_ingredient(ingredient_id, nin_id):
+@token_required
+def map_ingredient(auth_data,ingredient_id, nin_id):
     try:
         ingredient = Ingredient.query.filter_by(id = ingredient_id).first()
         nin_ingredient = NIN_Ingredient.query.filter_by(id = nin_id).first()
