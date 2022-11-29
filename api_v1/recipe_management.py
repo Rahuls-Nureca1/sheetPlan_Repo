@@ -6,7 +6,7 @@ from models.plan_schedule_model import Recipe
 from models.ingredient_serving_unit_model import IngredientServingUnit
 from models.ingredient_model import Ingredient
 from schemas.nin_ingredient_schema import NININgredientSchema
-from schemas.recipe_schema import RecipeSchema, CreateIngredientSchema
+from schemas.recipe_schema import RecipeSchema, CreateIngredientSchema, PlanRecipeSchema
 from schemas.ingredient_schema import IngredientSchema
 from schemas.ingredient_serving_unit_schema import IngredientServingUnitSchema
 from utils import api_logger, nin_mapping
@@ -22,6 +22,9 @@ recipe_management_bp = Blueprint('recipe_management', __name__)
 
 recipe_schema = RecipeSchema()
 recipe_schema_list = RecipeSchema(many = True)
+
+plan_recipe_schema = PlanRecipeSchema()
+plan_recipe_schema_list = PlanRecipeSchema(many = True)
 
 
 recipe_create_ingredient_schema = CreateIngredientSchema()
@@ -357,7 +360,7 @@ def get_recipe(recipe_id):
         if recipe is None:
             return make_response({"message":"Recipe not found"}, 404)
 
-        recipe_data = recipe_schema.dump(recipe)
+        recipe_data = plan_recipe_schema.dump(recipe)
         return make_response({"recipe":recipe_data}, 200)
     except Exception as e:
         print('in catch', e)
@@ -421,7 +424,7 @@ def recipe_list(offset,limit):
         if recipe == None:
             return make_response({"success":True,"data":[]}, 200)
 
-        recipe_data = recipe_schema_list.dump(recipe.items)
+        recipe_data = plan_recipe_schema_list.dump(recipe.items)
 
         return make_response({"success":True,"data":recipe_data}, 200)
     except Exception as e:
