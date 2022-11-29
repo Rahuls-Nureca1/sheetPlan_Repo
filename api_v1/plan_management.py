@@ -6,6 +6,7 @@ from extensions import db
 from models.plan_schedule_model import Plan_Schedule, Planned_Meal
 from schemas.plan_schedule_schema import PlanScheduleSchema, PlannedMealSchema,DefaultServingPlanScheduleSchema
 from schemas.plan_schedule_schema import PlanScheduleWithoutRecipeSchema
+from utils.auth_utils import token_required
 
 from models.day_model import Day
 from schemas.day_schema import DaySchema
@@ -67,7 +68,8 @@ recipe_schema_list = RecipeSchema(many = True)
 # TODO:
 # Implement List plan type
 @plan_management_bp.route('/plan_list', methods=['GET'])
-def get_plan_type():
+@token_required
+def get_plan_type(auth_data):
     try:
         plan = Plan.query.all()
         data = plan_schema_list.dump(plan)
@@ -79,7 +81,8 @@ def get_plan_type():
 # TODO:
 # Implement create plan type
 @plan_management_bp.route('/plan_type', methods=['POST'])
-def create_plan_type():
+@token_required
+def create_plan_type(auth_data):
     try:
         req_body = request.get_json()
         plan = Plan(req_body['plan_type'])
@@ -93,7 +96,8 @@ def create_plan_type():
 # TODO:
 # Implement update plan type
 @plan_management_bp.route('/plan_type/<id>', methods=['PUT'])
-def update_plan_type(id):
+@token_required
+def update_plan_type(auth_data,id):
     try:
         req_body = request.get_json()
         plan_type = Plan.query.filter(Plan.id == id).update({Plan.plan_name : req_body['plan_type']})
@@ -109,7 +113,8 @@ def update_plan_type(id):
 # TODO:
 # Implement delete plan type
 @plan_management_bp.route('/plan_type/<id>', methods=['DELETE'])
-def delete_plan_type(id):
+@token_required
+def delete_plan_type(auth_data,id):
     try:
        
         Plan.query.filter_by(id = id).delete()
@@ -126,7 +131,8 @@ def delete_plan_type(id):
 # TODO:
 # Implement List days
 @plan_management_bp.route('/day_list', methods=['GET'])
-def get_days():
+@token_required
+def get_days(auth_data):
     try:
         days = Day.query.all()
         data = day_schema_list.dump(days)
@@ -137,7 +143,8 @@ def get_days():
 # TODO:
 # Implement create day
 @plan_management_bp.route('/day', methods=['POST'])
-def create_day():
+@token_required
+def create_day(auth_data):
     try:
         req_body = request.get_json()
         day = Day(req_body['day_week_number'], req_body['day'])
@@ -151,7 +158,8 @@ def create_day():
 # TODO:
 # Implement update day
 @plan_management_bp.route('/day/<id>', methods=['PUT'])
-def update_day(id):
+@token_required
+def update_day(auth_data,id):
     try:
         req_body = request.get_json()
         day = Day.query.filter(Day.id == id).update({Day.day_week_number : req_body['day_week_number'],Day.day: req_body['day']})
@@ -167,7 +175,8 @@ def update_day(id):
 # TODO:
 # Implement delete day
 @plan_management_bp.route('/day/<id>', methods=['DELETE'])
-def delete_day(id):
+@token_required
+def delete_day(auth_data,id):
     try:
        
         day = Day.query.filter_by(id = id).delete()
@@ -187,7 +196,8 @@ def delete_day(id):
 # TODO:
 # Implement List timimng
 @plan_management_bp.route('/timing', methods=['GET'])
-def get_timings():
+@token_required
+def get_timings(auth_data):
     try:
         timings = Timing.query.all()
         data = timing_schema_list.dump(timings)
@@ -198,7 +208,8 @@ def get_timings():
 # TODO:
 # Implement create timing
 @plan_management_bp.route('/timing', methods=['POST'])
-def create_timing():
+@token_required
+def create_timing(auth_data):
     try:
         req_body = request.get_json()
         timing = Timing(req_body['timing_label'])
@@ -212,7 +223,8 @@ def create_timing():
 # TODO:
 # Implement update timing
 @plan_management_bp.route('/timing/<id>', methods=['PUT'])
-def update_timing(id):
+@token_required
+def update_timing(auth_data,id):
     try:
         req_body = request.get_json()
         timing = Timing.query.filter(Timing.id == id).update({Timing.timing_label : req_body['timing_label']})
@@ -228,7 +240,8 @@ def update_timing(id):
 # TODO:
 # Implement delete timing
 @plan_management_bp.route('/timing/<id>', methods=['DELETE'])
-def delete_timing(id):
+@token_required
+def delete_timing(auth_data,id):
     try:
        
         timing = Timing.query.filter_by(id = id).delete()
@@ -247,7 +260,8 @@ def delete_timing(id):
 # TODO:
 # Implement create plan schedule ie. createing plans
 @plan_management_bp.route('/', methods=['POST'])
-def create_plan_schedule():
+@token_required
+def create_plan_schedule(auth_data):
     try:
         req_body = request.get_json()
         plan = Plan.query.filter_by(id = req_body['plan_type_id']).first()
@@ -275,7 +289,8 @@ def create_plan_schedule():
 # TODO:
 # Implement list Plan schedule without recipe
 @plan_management_bp.route('/plan', methods=['GET'])
-def list_plan_schedule():
+@token_required
+def list_plan_schedule(auth_data):
     try:
         plan_schedule_data = Plan_Schedule.query.all()
         plan_data = plan_schedule_without_recipe_schema_list.dump(plan_schedule_data)
@@ -287,7 +302,8 @@ def list_plan_schedule():
 # TODO:
 # Implement update plan schedule
 @plan_management_bp.route('/<id>', methods=['PUT'])
-def update_plan_schedule(id):
+@token_required
+def update_plan_schedule(auth_data,id):
     try:
         payload = request.get_json()
         
@@ -320,7 +336,8 @@ def update_plan_schedule(id):
 # TODO:
 # Implement delete plan schedule
 @plan_management_bp.route('/<id>', methods=['DELETE'])
-def delete_plan_management(id):
+@token_required
+def delete_plan_management(auth_data,id):
     try:
         plan_schedule = Plan_Schedule.query.filter_by(id = id).first()
         if plan_schedule == None:
@@ -341,7 +358,8 @@ def delete_plan_management(id):
 # TODO:
 # Implement create a meal plan
 @plan_management_bp.route('/planMeal', methods=['POST'])
-def create_meal_plan():
+@token_required
+def create_meal_plan(auth_data):
     try:
       
         req_body = request.get_json()
@@ -380,7 +398,8 @@ def create_meal_plan():
 # TODO:
 # Implement create a meal plan by name
 @plan_management_bp.route('/planMealByName', methods=['POST'])
-def create_meal_plan_by_name():
+@token_required
+def create_meal_plan_by_name(auth_data):
     try:
       
         req_body = request.get_json()
@@ -458,7 +477,8 @@ def create_meal_plan_by_name():
 # TODO:
 # Implement create a meal plan
 @plan_management_bp.route('/delete-planned-meal', methods=['POST'])
-def delete_meal_plan():
+@token_required
+def delete_meal_plan(auth_data):
     try:
       
         req_body = request.get_json()
@@ -486,7 +506,8 @@ def delete_meal_plan():
 # TODO: Update API url to /plan/<plan_id>/day/<day_id>
 # Implement get meal plan from plan id and day id
 @plan_management_bp.route('/<planId>/<dayId>', methods=['GET'])
-def list_meal_plan_schedule(planId, dayId):
+@token_required
+def list_meal_plan_schedule(auth_data,planId,dayId):
     try:
         t1 = time.time()
 
@@ -547,7 +568,8 @@ def list_meal_plan_schedule(planId, dayId):
 # TODO: Update API url to /plan/<plan_id>/day/<day_id>/new
 # Implement get meal plan from plan id and day id
 @plan_management_bp.route('/<planId>/<dayId>/new', methods=['GET'])
-def list_meal_plan_schedule_new(planId, dayId):
+@token_required
+def list_meal_plan_schedule_new(auth_data,planId, dayId):
     try:
 
         t1 = time.time()
@@ -606,7 +628,8 @@ def list_meal_plan_schedule_new(planId, dayId):
 
 
 @plan_management_bp.route('/plan/search', methods=['GET'])
-def search_plan_schedule():
+@token_required
+def search_plan_schedule(auth_data):
     """
     Search plan schedule by plan name and day
 
@@ -675,7 +698,8 @@ def search_plan_schedule():
 
 
 @plan_management_bp.route('/plan/<plan_id>', methods=['GET'])
-def get_plan_details(plan_id):
+@token_required
+def get_plan_details(auth_data,plan_id):
     """
     Get plan details by plan id
     
@@ -744,7 +768,8 @@ def get_plan_details(plan_id):
 # TODO:
 # Implement auto schedule plan
 @plan_management_bp.route('/auto-schedule', methods=['GET'])
-def auto_plan_schedule():
+@token_required
+def auto_plan_schedule(auth_data):
     try:
        
         plan = Plan.query.all()
@@ -778,7 +803,8 @@ def auto_plan_schedule():
 # TODO:
 # Implement get plan schedule by id
 @plan_management_bp.route('/<id>', methods=['GET'])
-def plan_schedule_by_id(id):
+@token_required
+def plan_schedule_by_id(auth_data,id):
     try:
         plan_schedule = Plan_Schedule.query.filter_by(id = id).first()
         if plan_schedule == None:
